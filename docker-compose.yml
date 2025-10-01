@@ -9,8 +9,8 @@ services:
       - "443:443"
     # volumes:
     #   - ./nginx.conf:/etc/nginx/sites-available/pp-maksim.ru.conf
-    depends_on:
-      - frontend
+    # depends_on:
+    #   - frontend
     networks:
       - dev
 
