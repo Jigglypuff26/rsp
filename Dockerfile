@@ -7,7 +7,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --chown=user:group /build /var/www/rsp/build
+COPY /build /var/www/rsp/build
 # COPY --from=build /build /var/www/rsp/build
 # COPY --from=build nginx.conf /etc/nginx/sites-available/rsp.conf
 
