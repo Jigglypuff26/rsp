@@ -1,0 +1,23 @@
+networks:
+  dev:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    # volumes:
+    #   - ./nginx.conf:/etc/nginx/sites-available/pp-maksim.ru.conf
+    depends_on:
+      - frontend
+    networks:
+      - dev
+
+
+  frontend:
+    build:
+      context: contextPath
+      dockerfile: Dockerfile
+    networks:
+      - dev

@@ -1,0 +1,13 @@
+FROM node:alpine as build
+
+COPY package.json package.json
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:stable-alpine
+
+COPY --from=build /build /var/www/pp-maksim.ru/build
+COPY nginx.conf /etc/nginx/sites-available/pp-maksim.ru.conf
+EXPOSE 3000
+CMD [ "nginx", "-g", "daemon off;" ]
