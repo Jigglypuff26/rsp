@@ -7,8 +7,10 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    # volumes:
-    #   - ./nginx.conf:/etc/nginx/sites-available/pp-maksim.ru.conf
+    volumes:
+      # - ./nginx.conf:/etc/nginx/sites-available/pp-maksim.ru.conf
+      - ./nginx/nginx.conf:/etc/nginx/sites-available/rsp.conf
+      - ./build:/var/www/rsp/build
     depends_on:
       - frontend
     networks:
