@@ -17,7 +17,7 @@ services:
 
   frontend:
     build:
-      context: contextPath
+      context: .
       dockerfile: Dockerfile
     networks:
       - dev
