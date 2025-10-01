@@ -7,7 +7,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build /dist /usr/share/nginx/html
+COPY --from=build /build /var/www/pp-maksim.ru
 COPY --from=build nginx.conf /etc/nginx/sites-available/pp-maksim.ru.conf
 # COPY --from=build /build /var/www/pp-maksim.ru/build
 # COPY --from=build nginx.conf /etc/nginx/sites-available/pp-maksim.ru.conf
