@@ -18,6 +18,5 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
     networks:
       - dev
