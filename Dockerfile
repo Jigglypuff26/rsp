@@ -22,9 +22,10 @@ FROM nginx:alpine
 
 # Copy the built files from the previous step
 COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
 
 # Copy the custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 3000
 EXPOSE 3000
