@@ -1,4 +1,4 @@
-FROM node:alpine AS build.image
+FROM node:alpine AS build
 
 WORKDIR /app
 
@@ -9,8 +9,8 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build.image /app/build /var/www/rsp/build
-COPY --from=build.image /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
+COPY --from=build /app/build /var/www/rsp/build
+COPY --from=build /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 3000
 CMD [ "nginx", "-g", "daemon off;" ]
