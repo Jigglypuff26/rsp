@@ -1,17 +1,13 @@
 FROM node:alpine AS build
 
 WORKDIR /app
-
-COPY package.json package.json
+COPY package*.json ./
 RUN npm install
-COPY . /app
+COPY . .
 RUN npm run build
-
-FROM nginx:stable-alpine
-
-COPY --from=build /app/build /var/www/rsp/build
-# COPY --from=build /build /var/www/rsp/build
-# COPY --from=build /nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
-
-EXPOSE 3000
-CMD [ "nginx", "-g", "daemon off;" ]
+ 
+# Production Stage
+FROM nginx:stable-alpine AS production
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
