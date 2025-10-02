@@ -9,8 +9,8 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build /app/build /var/www/rsp/build
-COPY --from=build /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
+COPY --from=build  --chmod=755 /app/build /var/www/rsp/build
+COPY --from=build  --chmod=755 /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 80
 CMD [ "nginx", "-g", "daemon off;" ]
