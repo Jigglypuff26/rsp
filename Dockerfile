@@ -1,6 +1,6 @@
 
 # Use Node.js image to build the React app
-FROM node:alpine as build-stage
+FROM node:alpine AS build-stage
 
 # Set working directory
 WORKDIR /app
@@ -31,3 +31,20 @@ EXPOSE 3000
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# FROM node:alpine AS build
+
+# WORKDIR /app
+
+# COPY package.json package.json
+# RUN npm install
+# COPY . .
+# RUN npm run build
+
+# FROM nginx:stable-alpine
+
+# COPY --from=build /app/build /var/www/rsp/build
+# COPY --from=build /app/nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
+
+# EXPOSE 3000
+# CMD [ "nginx", "-g", "daemon off;" ]
