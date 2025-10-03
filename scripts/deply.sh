@@ -7,7 +7,7 @@ npm i
 npm run build
 
 # copy to dir
-sudo rm -rf /var/www/rsp/build
+# sudo rm -rf /var/www/rsp/build
 sudo cp -r ~/rsp/build /var/www/rsp/
 
 # nginx
