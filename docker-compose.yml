@@ -1,28 +1,20 @@
-networks:
-  dev:
-
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80    # HTTP (для валидации Certbot)
+      - 443:443  # HTTPS
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d          # Nginx конфиг
+      - ./static-files:/usr/share/nginx/html      # Добавляем статические файлы в nginx в Docker'е
+      - ./certbot/www:/var/www/certbot            # Certbot HTTP challenge
+      - ./certbot/conf:/etc/letsencrypt           # SSL certificates
+    restart: unless-stopped
 
   certbot:
-    image: certbot/certbot
+    image: certbot/certbot:latest
     volumes:
-      - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
-    command: certonly --webroot -w /var/www/certbot --email makc_progress@mail.ru -d pp-maksim.ru --agree-tos --no-eff-email
-    networks:
-      - dev
-
-  frontend:
-    build:
-      context: .
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
       - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt
-      - '/var/www/rsp/build:/var/www/rsp/build'
-      - './nginx/rsp.conf:/etc/nginx/sites-available/rsp.conf'
-    networks:
-      - dev
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ваша_почта --agree-tos -d ваш_домен
+    restart: unless-stopped
