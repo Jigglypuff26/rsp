@@ -1,17 +1,30 @@
 # cd /home/maksim/rsp
 # запуск скрипта  командой  bash полный_адрес_скрипта
 # Пример: bash /home/maksim/rsp/build_scripts/deploy.sh
+
+# подтягиваем изменения
 git pull
+# удаляем старую папку build
 sudo rm -rf build
 
+# обновляем npm пакеты
 npm i
+# сборка проекта
 npm run build
 
+# удаляем папку build из репозитория куда смотрит nginx
 sudo rm -rf /var/www/rsp/build
+# копируем папку с собранным проектом в репозитоий куда смотрит nginx
 sudo cp -r build /var/www/rsp/
 
-sudo rm -rf /etc/nginx/sites-available/rsp.conf
-sudo cp -r nginx/rsp.conf /etc/nginx/sites-available/
+# работа с конфигом nginx
+# удаление ссылки на старый конфиг
 sudo rm -rf /etc/nginx/sites-enabled/rsp.conf
+# удаление старого конфига
+sudo rm -rf /etc/nginx/sites-available/rsp.conf
+# копирование текущего конфига
+sudo cp -r nginx/rsp.conf /etc/nginx/sites-available/
+# создание ссылки на текущий конфиг
 sudo ln -s /etc/nginx/sites-available/rsp.conf /etc/nginx/sites-enabled/
+# перезапус nginx
 sudo systemctl restart nginx
