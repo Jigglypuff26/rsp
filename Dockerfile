@@ -12,7 +12,7 @@ FROM nginx:stable-alpine
 
 COPY --from=build-rsp /app/build /usr/share/nginx/html
 COPY --from=build-rsp /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
-COPY source dest
+COPY /etc/letsencrypt/live/pp-maksim.ru /etc/letsencrypt/live/pp-maksim.ru
 
 EXPOSE 80
 EXPOSE 443
