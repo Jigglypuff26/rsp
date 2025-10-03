@@ -1,4 +1,6 @@
 # cd /home/maksim/rsp
+# запуск скрипта  командой  bash полный_адрес_скрипта
+# Пример: bash /home/maksim/rsp/build_scripts/deploy.sh
 git pull
 sudo rm -rf build
 
