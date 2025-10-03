@@ -23,9 +23,9 @@ services:
     build:
       context: .
     restart: always
-    ports:
-      - "80:80"
-      - "443:443"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
     volumes:
       - '/usr/share/nginx/html:/usr/share/nginx/html'
     networks:
