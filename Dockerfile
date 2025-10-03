@@ -12,7 +12,7 @@ FROM nginx:stable-alpine
 
 RUN sudo rm -rf /etc/nginx/sites-available/rsp.conf
 COPY --from=build /app/build /var/www/rsp/build
-COPY --from=build /nginx/nginx.conf /etc/nginx/sites-available/rsp.conf
+COPY --from=build /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 80
 CMD [ "nginx", "-g", "daemon off;" ]
