@@ -8,3 +8,4 @@ services:
       - "443:443"
     volumes:
       - './nginx.conf:/etc/nginx/nginx.conf'
+      - '/etc/letsencrypt/live/pp-maksim.ru/:/etc/letsencrypt/live/pp-maksim.ru/'
