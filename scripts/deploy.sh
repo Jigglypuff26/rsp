@@ -1,4 +1,4 @@
-cd /home/maksim/rsp
+# cd /home/maksim/rsp
 git pull
 sudo rm -rf build
 
