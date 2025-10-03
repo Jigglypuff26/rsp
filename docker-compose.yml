@@ -2,18 +2,25 @@ networks:
   dev:
 
 services:
-  # nginx:
-  #   image: nginx:stable-alpine
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - './nginx.conf:/etc/nginx/nginx.conf'
-  #     - '/etc/letsencrypt/:/etc/letsencrypt/'
-  #   depends_on:
-  #     - frontend
-  #   networks:
-  #     - dev
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+    depends_on:
+      - frontend
+    networks:
+      - dev
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
   frontend:
     build:
