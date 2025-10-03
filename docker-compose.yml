@@ -8,7 +8,7 @@ services:
     volumes:
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt
-    command: certonly --webroot -w /var/www/certbot --email your_email@example.com -d your_domain.com --agree-tos --no-eff-email
+    command: certonly --webroot -w /var/www/certbot --email makc_progress@mail.ru -d pp-maksim.ru --agree-tos --no-eff-email
     networks:
       - dev
 
