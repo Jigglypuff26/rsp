@@ -10,3 +10,5 @@ services:
       - './nginx.conf:/etc/nginx/nginx.conf'
       - '/etc/letsencrypt/live/pp-maksim.ru/fullchain.pem:/etc/letsencrypt/live/pp-maksim.ru/fullchain.pem'
       - '/etc/letsencrypt/live/pp-maksim.ru/privkey.pem:/etc/letsencrypt/live/pp-maksim.ru/privkey.pem'
+      - '/etc/letsencrypt/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf'
+      - '/etc/letsencrypt/ssl-dhparams.pem:/etc/letsencrypt/ssl-dhparams.pem'
