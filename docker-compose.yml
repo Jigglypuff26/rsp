@@ -3,14 +3,14 @@ networks:
 
 services:
 
-# docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d [domain-name]
-# or
-# docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d [domain-name]
-  # certbot:
-  #   image: certbot/certbot:latest
-  #   volumes:
-  #     - ./certbot/www/:/var/www/certbot/:rw
-  #     - ./certbot/conf/:/etc/letsencrypt/:rw
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    command: certonly --webroot -w /var/www/certbot --email your_email@example.com -d your_domain.com --agree-tos --no-eff-email
+    networks:
+      - dev
 
   frontend:
     build:
@@ -20,7 +20,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      # - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
       - '/var/www/rsp/build:/var/www/rsp/build'
       - './nginx/rsp.conf:/etc/nginx/sites-available/rsp.conf'
     networks:
