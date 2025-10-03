@@ -14,4 +14,5 @@ COPY --from=build /app/build /var/www/rsp/build
 COPY --from=build /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 80
+EXPOSE 443
 CMD [ "nginx", "-g", "daemon off;" ]
