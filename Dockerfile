@@ -10,7 +10,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build /app/build /var/www/rsp/build
+COPY --from=build /app/build /usr/share/nginx/html
 COPY --from=build /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 80
