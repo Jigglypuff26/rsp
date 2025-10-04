@@ -13,6 +13,5 @@ FROM nginx:stable-alpine
 COPY --from=build-rsp /app/build /usr/share/nginx/html
 COPY --from=build-rsp /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE 3000
 CMD [ "nginx", "-g", "daemon off;" ]
