@@ -18,7 +18,6 @@ sudo rm -rf /var/www/rsp/build
 sudo cp -r build /var/www/rsp/
 
 # работа с конфигом nginx
-cd $(dirname $(realpath $0))
 # удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
 sudo  rm -f /etc/nginx/sites-enabled/*
 
