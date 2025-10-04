@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/dev/Dockerfile.dev
+    container_name: dev-mod
     restart: always
     ports:
       - "3000:3000"

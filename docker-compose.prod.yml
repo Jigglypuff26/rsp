@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/prod/Dockerfile.prod
+    container_name: prod-mod
     restart: always
     ports:
       - "80:80"
