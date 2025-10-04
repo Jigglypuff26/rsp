@@ -18,8 +18,8 @@ sudo rm -rf /var/www/rsp/build
 sudo cp -r build /var/www/rsp/
 
 # работа с конфигом nginx
-# удаление ссылки на старый конфиг
-sudo rm -rf /etc/nginx/sites-enabled/react.conf
+# удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
+sudo  rm -f /etc/nginx/sites-enabled/*
 # удаление старого конфига
 sudo rm -rf /etc/nginx/sites-available/react.conf
 # копирование текущего конфига

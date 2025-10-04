@@ -1,10 +1,9 @@
-# опционально т.к ещё на этом сервере тестируется другое приложение
-sudo rm -rf /etc/nginx/sites-available/next.conf
-sudo rm -rf /etc/nginx/sites-enabled/next.conf
+# удаление всех старых ссылок
+sudo  rm -f /etc/nginx/sites-enabled/*
 
 # удаление старого конфига
 sudo rm -rf /etc/nginx/sites-available/react.conf
-sudo rm -rf /etc/nginx/sites-enabled/react.conf
+# sudo rm -rf /etc/nginx/sites-enabled/react.conf
 
 # копирование nginx файла конфигурации
 sudo cp -r nginx/react.conf /etc/nginx/sites-available/
