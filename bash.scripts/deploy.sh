@@ -35,4 +35,5 @@
 
 # cd "$parent_path"
 
+#!/bin/bash
 ./deploy.nginx.conf.sh
