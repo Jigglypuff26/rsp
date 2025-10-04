@@ -1,6 +1,9 @@
 # cd /home/maksim/rsp
 # запуск скрипта  командой  bash полный_адрес_скрипта
 # Пример: bash /home/maksim/rsp/build_scripts/deploy.sh
+# или Реомендуется!!!!
+# запуск скрипта  командой  bash относниельно места запуска скрипта 
+# Пример: sh ./bash.scripts/deploy.sh
 
 # подтягиваем изменения
 git pull
@@ -18,17 +21,18 @@ sudo rm -rf /var/www/rsp/build
 sudo cp -r build /var/www/rsp/
 
 # работа с конфигом nginx
-# удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
-sudo  rm -f /etc/nginx/sites-enabled/*
+./deploy.nginx.conf.sh
+# # удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
+# sudo  rm -f /etc/nginx/sites-enabled/*
 
-# удаление старого конфига
-sudo rm -rf /etc/nginx/sites-available/react.conf
+# # удаление старого конфига
+# sudo rm -rf /etc/nginx/sites-available/react.conf
 
-# копирование nginx файла конфигурации
-sudo cp -r nginx/react.conf /etc/nginx/sites-available/
-# создание ссылки на nginx файл конфигурации
-sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
-# перезапус nginx
-sudo systemctl restart nginx
+# # копирование nginx файла конфигурации
+# sudo cp -r nginx/react.conf /etc/nginx/sites-available/
+# # создание ссылки на nginx файл конфигурации
+# sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
+# # перезапус nginx
+# sudo systemctl restart nginx
 
 echo "Все прошло успешно"
