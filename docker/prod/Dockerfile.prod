@@ -12,8 +12,6 @@ FROM nginx:stable-alpine
 
 COPY --from=build-prod /app-prod/build /usr/share/nginx/html
 COPY --from=build-prod /app-prod/nginx/react.conf /etc/nginx/sites-available/react.conf
-RUN  rm -f /etc/nginx/sites-enabled/*
-RUN  sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
 
 EXPOSE 80
 CMD [ "nginx", "-g", "daemon off;" ]

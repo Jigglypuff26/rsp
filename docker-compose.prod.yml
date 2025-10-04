@@ -13,9 +13,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - './nginx/react.conf:/etc/nginx/sites-available/react.conf'
-      - './nginx.conf:/etc/nginx/nginx.conf'
-      - '/etc/letsencrypt/:/etc/letsencrypt/'
+    # volumes:
+    #   - './nginx/rsp.conf:/etc/nginx/sites-available/rsp.conf'
+    #   - './nginx.conf:/etc/nginx/nginx.conf'
+    #   - '/etc/letsencrypt/:/etc/letsencrypt/'
     networks:
       - prod
