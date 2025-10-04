@@ -1,7 +1,7 @@
 # =====================
-FROM node:alpine AS build-rsp
+FROM node:alpine AS build-dev
 
-WORKDIR /app
+WORKDIR /app-dev
 
 COPY package.json package.json
 RUN npm install
@@ -10,8 +10,8 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 
-COPY --from=build-rsp /app/build /usr/share/nginx/html
-COPY --from=build-rsp /app/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
+COPY --from=build-dev /app-dev/build /usr/share/nginx/html
+COPY --from=build-dev /app-dev/nginx/rsp.conf /etc/nginx/sites-available/rsp.conf
 
 EXPOSE 3000
 CMD [ "nginx", "-g", "daemon off;" ]
