@@ -31,8 +31,8 @@
 # # перезапус nginx
 # sudo systemctl restart nginx
 
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+# parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-cd "$parent_path"
+# cd "$parent_path"
 
 ./deploy.nginx.conf.sh
