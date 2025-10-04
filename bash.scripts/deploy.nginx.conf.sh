@@ -10,3 +10,5 @@ sudo cp -r nginx/react.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
 # перезапус nginx
 sudo systemctl restart nginx
+
+echo "NGINX готов"
