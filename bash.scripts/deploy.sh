@@ -18,4 +18,4 @@ sudo rm -rf /var/www/rsp/build
 sudo cp -r build /var/www/rsp/
 
 # работа с конфигом nginx
-bash ~/deploy.nginx.conf.sh
+bash ./deploy.nginx.conf.sh
