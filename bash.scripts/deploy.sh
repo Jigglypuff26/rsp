@@ -19,12 +19,12 @@ sudo cp -r build /var/www/rsp/
 
 # работа с конфигом nginx
 # удаление ссылки на старый конфиг
-sudo rm -rf /etc/nginx/sites-enabled/rsp.conf
+sudo rm -rf /etc/nginx/sites-enabled/react.conf
 # удаление старого конфига
-sudo rm -rf /etc/nginx/sites-available/rsp.conf
+sudo rm -rf /etc/nginx/sites-available/react.conf
 # копирование текущего конфига
-sudo cp -r nginx/rsp.conf /etc/nginx/sites-available/
+sudo cp -r nginx/react.conf /etc/nginx/sites-available/
 # создание ссылки на текущий конфиг
-sudo ln -s /etc/nginx/sites-available/rsp.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
 # перезапус nginx
 sudo systemctl restart nginx
