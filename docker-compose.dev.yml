@@ -4,8 +4,8 @@ networks:
 services:
   frontend:
     build:
-      context: ../../
-      dockerfile: Dockerfile.dev
+      context: .
+      dockerfile: ./docker/dev/Dockerfile.dev
     restart: always
     ports:
       - "3000:3000"

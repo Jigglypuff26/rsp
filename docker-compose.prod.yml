@@ -4,8 +4,8 @@ networks:
 services:
   frontend:
     build:
-      context: ../../
-      dockerfile: Dockerfile.prod
+      context: .
+      dockerfile: ./docker/prod/Dockerfile.prod
     restart: always
     ports:
       - "80:80"
