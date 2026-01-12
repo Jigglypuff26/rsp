@@ -20,18 +20,35 @@ sudo rm -rf /var/www/rsp/build
 # копируем папку с собранным проектом в репозитоий куда смотрит nginx
 sudo cp -r build /var/www/rsp/
 
-# работа с конфигом nginx
-# удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
-sudo  rm -f /etc/nginx/sites-enabled/*
+# Работа с конфигом nginx
+# Удаление (опционально) т.к ещё на этом сервере тестируется другое приложение
+sudo rm -f /etc/nginx/sites-enabled/*
 
-# удаление старого конфига
+# Удаление старого конфига
 sudo rm -rf /etc/nginx/sites-available/react.conf
 
-# копирование nginx файла конфигурации
+# Копирование nginx файла конфигурации
 sudo cp -r nginx/react.conf /etc/nginx/sites-available/
-# создание ссылки на nginx файл конфигурации
+
+# Создание ссылки на nginx файл конфигурации
 sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
-# перезапус nginx
-sudo systemctl restart nginx
+
+# Проверка конфигурации перед перезапуском
+echo "Проверка конфигурации nginx..."
+sudo nginx -t
+
+if [ $? -eq 0 ]; then
+    echo "✅ Конфигурация корректна, перезапуск nginx..."
+    sudo systemctl restart nginx
+    if [ $? -ne 0 ]; then
+        echo "❌ Ошибка при перезапуске nginx"
+        echo "Проверьте логи: sudo journalctl -xeu nginx.service"
+        exit 1
+    fi
+else
+    echo "❌ Ошибка в конфигурации nginx!"
+    echo "Исправьте ошибки перед перезапуском"
+    exit 1
+fi
 
 echo "Все прошло успешно"
