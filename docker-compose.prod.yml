@@ -1,13 +1,17 @@
-version: '3.9'
+# пример запуска скрипта docker compose -f docker-compose.prod.yml -p rsp-prod up
+
+networks:
+  prod:
 
 services:
-  app:
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: rsp-prod
+      dockerfile: ./docker/prod/Dockerfile.prod
+    container_name: prod-mod
+    restart: always
     ports:
-      - "8080:80"
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
+      - "80:80"
+      - "443:443"
+    networks:
+      - prod
