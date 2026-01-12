@@ -10,3 +10,8 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+}

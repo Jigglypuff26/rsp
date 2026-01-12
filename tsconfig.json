@@ -23,19 +23,5 @@
   "include": [
     "src"
   ],
-  "baseUrl": "src",
-  "paths": {
-      "@app/*": ["app/*"],
-      "@assets/*": ["assets/*"],
-      "@components/*": ["components/*"],
-      "@hooks/*": ["hooks/*"],
-      "@services/*": ["services/*"],
-      "@shared/*": ["shared/*"],
-      "@store/*": ["store/*"],
-      "@providers/*": ["providers/*"],
-      "@config/*": ["config/*"],
-      "@external/*": ["external/*"],
-      "@utils/*": ["utils/*"],
-      "@service-actions/*": ["service-actions/*"]
-    }
+  "baseUrl": "src"
 }
