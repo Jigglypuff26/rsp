@@ -106,13 +106,44 @@ sudo chmod 600 /etc/letsencrypt/live/your-domain.com/privkey.pem
 sudo certbot renew
 ```
 
-### 5. "nginx: [emerg] "limit_req_zone" directive is not allowed here"
+### 5. "nginx: [emerg] zero size shared memory zone 'general'"
+
+**Причина:** 
+- Зоны rate limiting не определены в `nginx.conf`
+- Зоны определены после `include` директив
+- Используется старая версия `nginx.conf` без зон
+
+**Решение:**
+
+```bash
+# 1. Проверьте наличие зон в nginx.conf
+sudo grep "limit_req_zone\|limit_conn_zone" /etc/nginx/nginx.conf
+
+# 2. Убедитесь, что зоны определены ДО include
+# Порядок должен быть:
+#   limit_req_zone ...;
+#   limit_conn_zone ...;
+#   ...
+#   include /etc/nginx/sites-enabled/*;
+
+# 3. Если зон нет, добавьте в блок http ДО include:
+limit_req_zone $binary_remote_addr zone=general:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=api:10m rate=5r/s;
+limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
+
+# 4. Временно отключите rate limiting в react.conf для диагностики
+# Закомментируйте строки:
+# limit_req zone=general burst=20 nodelay;
+# limit_conn conn_limit_per_ip 10;
+```
+
+### 6. "nginx: [emerg] "limit_req_zone" directive is not allowed here"
 
 **Причина:** `limit_req_zone` должен быть в блоке `http`, а не в `server`
 
-**Решение:** Убедитесь, что зоны rate limiting определены в `nginx.conf` в блоке `http`
+**Решение:** Убедитесь, что зоны rate limiting определены в `nginx.conf` в блоке `http` ДО директив `include`
 
-### 6. "nginx: [emerg] "ssl_stapling" requires "resolver" directive"
+### 7. "nginx: [emerg] "ssl_stapling" requires "resolver" directive"
 
 **Причина:** Для SSL stapling требуется resolver
 

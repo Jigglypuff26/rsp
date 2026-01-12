@@ -1,3 +1,6 @@
+# Версия react.conf БЕЗ rate limiting для диагностики
+# Используйте этот файл, если получаете ошибку "zero size shared memory zone"
+
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2 ipv6only=on;
@@ -22,19 +25,10 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    # Rate limiting
-    # Зоны должны быть определены в nginx.conf в блоке http ДО include
-    # Если получаете ошибку "zero size shared memory zone", проверьте:
-    # 1. Зоны определены в /etc/nginx/nginx.conf
-    # 2. Зоны определены ДО include /etc/nginx/sites-enabled/*
-    # 3. Синтаксис: limit_req_zone $binary_remote_addr zone=general:10m rate=10r/s;
-    # 
-    # Временно закомментируйте следующие строки, если проблема сохраняется:
+    # Rate limiting ОТКЛЮЧЕН для диагностики
+    # Раскомментируйте после исправления проблемы с зонами:
     # limit_req zone=general burst=20 nodelay;
     # limit_conn conn_limit_per_ip 10;
-    
-    limit_req zone=general burst=20 nodelay;
-    limit_conn conn_limit_per_ip 10;
 
     # Cache control for index.html
     location = /index.html {
