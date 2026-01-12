@@ -8,16 +8,24 @@
 
 ```bash
 # Сборка и запуск
-docker-compose -f docker-compose.dev.yml up --build
+docker-compose up --build
 
 # Запуск в фоновом режиме
-docker-compose -f docker-compose.dev.yml up -d
+docker-compose up -d
 
 # Остановка
-docker-compose -f docker-compose.dev.yml down
+docker-compose down
+
+# Просмотр логов
+docker-compose logs -f
 ```
 
 Приложение будет доступно по адресу `http://localhost:3000`
+
+**Особенности dev-режима:**
+- Hot-reload включен (изменения в коде применяются автоматически)
+- Исходный код монтируется как volume
+- Используется `Dockerfile.dev`
 
 ### Продакшен
 
@@ -30,18 +38,29 @@ docker-compose -f docker-compose.prod.yml up -d
 
 # Остановка
 docker-compose -f docker-compose.prod.yml down
+
+# Просмотр логов
+docker-compose -f docker-compose.prod.yml logs -f
 ```
 
 Приложение будет доступно по адресу `http://localhost:80`
 
-### Структура Docker
+**Особенности prod-режима:**
+- Multi-stage build для оптимизации размера образа
+- Используется nginx для раздачи статических файлов
+- Включено gzip сжатие и кеширование
+- Настроены security headers
+
+### Структура Docker файлов
 
 ```
-docker/
-├── dev/
-│   └── Dockerfile.dev    # Dockerfile для разработки
-└── prod/
-    └── Dockerfile.prod   # Dockerfile для продакшена
+.
+├── Dockerfile              # Production Dockerfile (multi-stage)
+├── Dockerfile.dev         # Development Dockerfile
+├── docker-compose.yml     # Development compose
+├── docker-compose.prod.yml # Production compose
+├── nginx.conf             # Nginx конфигурация для production
+└── .dockerignore          # Исключения для Docker build
 ```
 
 ## 📦 Сборка для продакшена

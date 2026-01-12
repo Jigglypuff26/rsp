@@ -2,30 +2,21 @@
 node_modules
 npm-debug.log
 yarn-error.log
-# package-lock.json нужен для сборки, не исключаем
-yarn.lock
+package-lock.json
 
-# Build outputs
+# Production build
 build
 dist
-*.log
 
-# Git
-.git
-.gitignore
-.gitattributes
-
-# Docker
-Dockerfile*
-.dockerignore
-docker-compose*.yml
-
-# Environment
-.env
+# Development files
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Testing
+coverage
+.nyc_output
 
 # IDE
 .vscode
@@ -38,14 +29,28 @@ docker-compose*.yml
 .DS_Store
 Thumbs.db
 
-# Testing
-coverage
-.nyc_output
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
 
 # Documentation
 docs
 *.md
-README.md
+!README.md
 
-# Scripts (optional, uncomment if not needed in container)
-# bash.scripts
+# Scripts
+bash.scripts
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Misc
+.eslintcache
+.cache
