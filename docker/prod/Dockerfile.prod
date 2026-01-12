@@ -1,17 +1,42 @@
 # =====================
+# Build stage
 FROM node:alpine AS build-prod
 
 WORKDIR /app-prod
 
-COPY package.json package.json
-RUN npm install
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
+
+# Copy source code
 COPY . .
+
+# Build the application
 RUN npm run build
 
+# =====================
+# Production stage
 FROM nginx:stable-alpine
 
+# Copy built files from build stage
 COPY --from=build-prod /app-prod/build /usr/share/nginx/html
-COPY --from=build-prod /app-prod/nginx/react.conf /etc/nginx/sites-available/react.conf
 
+# Copy nginx configuration
+# Используем базовую конфигурацию без SSL по умолчанию
+# Для production с SSL можно заменить на react.conf через volume в docker-compose
+COPY --from=build-prod /app-prod/nginx/react.conf.default /etc/nginx/conf.d/default.conf
+
+# Create nginx directories if needed
+RUN mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+
+# Expose port
 EXPOSE 80
-CMD [ "nginx", "-g", "daemon off;" ]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost/health || exit 1
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

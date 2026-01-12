@@ -12,5 +12,15 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app-dev/src:ro
+      - ./public:/app-dev/public:ro
+      # Exclude node_modules to use container's version
+      - /app-dev/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     networks:
       - dev

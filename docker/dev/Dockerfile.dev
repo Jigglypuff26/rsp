@@ -1,11 +1,24 @@
 # =====================
-FROM node:alpine AS build-rsp
+FROM node:alpine
 
 WORKDIR /app-dev
 
-COPY package.json package.json
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install dependencies
 RUN npm install
+
+# Copy source code
 COPY . .
 
+# Expose port
 EXPOSE 3000
+
+# Set environment variables for React
+ENV HOST=0.0.0.0
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+# Start development server
 CMD ["npm", "start"]

@@ -13,9 +13,22 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
+    # Для production с SSL раскомментируйте volumes ниже:
     # volumes:
-    #   - './nginx/rsp.conf:/etc/nginx/sites-available/rsp.conf'
-    #   - './nginx.conf:/etc/nginx/nginx.conf'
-    #   - '/etc/letsencrypt/:/etc/letsencrypt/'
+    #   # Кастомная nginx конфигурация с SSL
+    #   - './nginx/react.conf:/etc/nginx/conf.d/default.conf:ro'
+    #   # Основной nginx.conf (если нужны изменения)
+    #   - './nginx.conf:/etc/nginx/nginx.conf:ro'
+    #   # SSL сертификаты Let's Encrypt
+    #   - '/etc/letsencrypt/:/etc/letsencrypt/:ro'
+    environment:
+      - NODE_ENV=production
     networks:
       - prod
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
