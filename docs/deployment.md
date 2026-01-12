@@ -49,7 +49,9 @@ docker compose -f docker-compose.prod.yml down
 docker compose -f docker-compose.prod.yml logs -f
 ```
 
-Приложение будет доступно по адресу `http://localhost:80`
+Приложение будет доступно по адресу `http://localhost:8080`
+
+**Примечание:** Если порт 80 занят другим процессом, можно изменить порт в `docker-compose.prod.yml` (например, на `8080:80` или другой свободный порт).
 
 **Особенности prod-режима:**
 - Multi-stage build для оптимизации размера образа
