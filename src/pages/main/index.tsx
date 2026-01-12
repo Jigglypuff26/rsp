@@ -1,6 +1,8 @@
 import React from 'react';
-import logo from '../../shared/assets/logo.svg';
+
 import './styles.css';
+
+import logo from '../../shared/assets/logo.svg';
 
 export const MainPage = () => (
   <div className="main-page">

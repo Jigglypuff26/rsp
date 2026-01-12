@@ -9,5 +9,23 @@
   "endOfLine": "lf",
   "bracketSpacing": true,
   "jsxSingleQuote": false,
-  "bracketSameLine": false
+  "bracketSameLine": false,
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^react$",
+    "^react-dom",
+    "^react-router-dom",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^app/",
+    "^pages/",
+    "^widgets/",
+    "^features/",
+    "^entities/",
+    "^shared/",
+    "^\\./"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "4.9.5",
+  "importOrderCaseSensitive": false
 }
