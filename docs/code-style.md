@@ -6,6 +6,8 @@
 
 ### Конфигурация
 
+Конфигурация ESLint находится в файле `.eslintrc.json` в корне проекта.
+
 Проект использует:
 - `eslint-config-airbnb` - базовые правила Airbnb
 - `eslint-config-airbnb-typescript` - правила для TypeScript
@@ -107,6 +109,8 @@ const GetUserName = (User: any) => User.name;
 
 ### Конфигурация
 
+Конфигурация Prettier находится в файле `.prettierrc` в корне проекта:
+
 ```json
 {
   "semi": true,
@@ -116,7 +120,10 @@ const GetUserName = (User: any) => User.name;
   "tabWidth": 2,
   "useTabs": false,
   "arrowParens": "avoid",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "bracketSpacing": true,
+  "jsxSingleQuote": false,
+  "bracketSameLine": false
 }
 ```
 

@@ -8,48 +8,46 @@
 
 - **Docker** >= 20.x (протестировано с версией 29.1.3)
 - **Docker Compose** >= 2.x
-- **docker-compose.yml** версия 3.9
 
 ### Разработка
 
 ```bash
 # Сборка и запуск
-docker compose up --build
+docker compose -f docker-compose.dev.yml -p rsp-dev up --build
 
 # Запуск в фоновом режиме
-docker compose up -d
+docker compose -f docker-compose.dev.yml -p rsp-dev up -d
 
 # Остановка
-docker compose down
+docker compose -f docker-compose.dev.yml -p rsp-dev down
 
 # Просмотр логов
-docker compose logs -f
+docker compose -f docker-compose.dev.yml -p rsp-dev logs -f
 ```
 
 Приложение будет доступно по адресу `http://localhost:3000`
 
 **Особенности dev-режима:**
 - Hot-reload включен (изменения в коде применяются автоматически)
-- Исходный код монтируется как volume
-- Используется `Dockerfile.dev`
+- Используется `docker/dev/Dockerfile.dev`
 
 ### Продакшен
 
 ```bash
 # Сборка и запуск
-docker compose -f docker-compose.prod.yml up --build
+docker compose -f docker-compose.prod.yml -p rsp-prod up --build
 
 # Запуск в фоновом режиме
-docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml -p rsp-prod up -d
 
 # Остановка
-docker compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml -p rsp-prod down
 
 # Просмотр логов
-docker compose -f docker-compose.prod.yml logs -f
+docker compose -f docker-compose.prod.yml -p rsp-prod logs -f
 ```
 
-Приложение будет доступно по адресу `http://localhost:8080`
+Приложение будет доступно по адресу `http://localhost` (порт 80)
 
 **Примечание:** Если порт 80 занят другим процессом, можно изменить порт в `docker-compose.prod.yml` (например, на `8080:80` или другой свободный порт).
 
@@ -63,17 +61,21 @@ docker compose -f docker-compose.prod.yml logs -f
 
 ```
 .
-├── Dockerfile              # Production Dockerfile (multi-stage)
-├── Dockerfile.dev         # Development Dockerfile
-├── docker-compose.yml     # Development compose (версия 3.9)
-├── docker-compose.prod.yml # Production compose (версия 3.9)
-├── nginx.conf             # Nginx конфигурация для production
-└── .dockerignore          # Исключения для Docker build
+├── docker/
+│   ├── dev/
+│   │   └── Dockerfile.dev    # Development Dockerfile
+│   └── prod/
+│       └── Dockerfile.prod   # Production Dockerfile (multi-stage)
+├── docker-compose.dev.yml    # Development compose
+├── docker-compose.prod.yml   # Production compose
+├── nginx/
+│   └── react.conf            # Nginx конфигурация для production
+└── nginx.conf                # Основной конфигурационный файл nginx (опционально)
 ```
 
 **Примечание:** 
-- Файлы docker-compose используют версию 3.9, что обеспечивает полную совместимость с Docker 29.1.3 и новее.
 - В Docker 29.x используется команда `docker compose` (с пробелом) вместо `docker-compose` (с дефисом).
+- Файлы docker-compose не требуют указания версии при использовании Docker Compose v2.
 
 ## 📦 Сборка для продакшена
 
