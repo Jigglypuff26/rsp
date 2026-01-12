@@ -30,30 +30,40 @@ docker compose -f docker-compose.dev.yml -p rsp-dev down
 
 ## Production
 
-### Сборка и запуск
+### Вариант 1: Без SSL (для тестирования)
 
 ```bash
-docker compose -f docker-compose.prod.yml -p rsp-prod up --build -d
+docker compose -f docker-compose.prod.no-ssl.yml -p rsp-prod up --build -d
 ```
 
 Приложение будет доступно на `http://localhost:8080`
 
-### Настройка SSL (опционально)
+### Вариант 2: С SSL (для production)
 
-1. Раскомментируйте volumes в `docker-compose.prod.yml`:
-```yaml
-volumes:
-  - './nginx/react.conf:/etc/nginx/conf.d/default.conf:ro'
-  - './nginx.conf:/etc/nginx/nginx.conf:ro'
-  - '/etc/letsencrypt/:/etc/letsencrypt/:ro'
-```
+**Требования:**
+- SSL сертификаты Let's Encrypt должны быть установлены в `/etc/letsencrypt/live/pp-maksim.ru/`
+- Домен должен указывать на сервер
 
-2. Убедитесь, что SSL сертификаты находятся в `/etc/letsencrypt/`
+**Запуск:**
 
-3. Пересоберите контейнер:
 ```bash
 docker compose -f docker-compose.prod.yml -p rsp-prod up --build -d
 ```
+
+Приложение будет доступно на:
+- HTTP: `http://pp-maksim.ru` (редирект на HTTPS)
+- HTTPS: `https://pp-maksim.ru`
+
+**Настройка SSL:**
+
+1. Убедитесь, что SSL сертификаты установлены:
+```bash
+sudo certbot certonly --standalone -d pp-maksim.ru -d www.pp-maksim.ru
+```
+
+2. Проверьте, что сертификаты находятся в `/etc/letsencrypt/live/pp-maksim.ru/`
+
+3. Запустите контейнер (volumes уже настроены в docker-compose.prod.yml)
 
 ### Health Check
 

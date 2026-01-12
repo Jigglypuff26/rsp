@@ -13,14 +13,20 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
-    # Для production с SSL раскомментируйте volumes ниже:
+    # Volumes для nginx конфигурации
+    # Вариант 1: Без SSL (по умолчанию - volumes закомментированы)
+    # Используется react.conf.default из Dockerfile
+    
+    # Вариант 2: С SSL (раскомментируйте volumes ниже для использования SSL)
+    # Убедитесь, что SSL сертификаты установлены в /etc/letsencrypt/live/pp-maksim.ru/
     # volumes:
     #   # Кастомная nginx конфигурация с SSL
     #   - './nginx/react.conf:/etc/nginx/conf.d/default.conf:ro'
-    #   # Основной nginx.conf (если нужны изменения)
-    #   - './nginx.conf:/etc/nginx/nginx.conf:ro'
-    #   # SSL сертификаты Let's Encrypt
+    #   # SSL сертификаты Let's Encrypt (обязательно для SSL)
     #   - '/etc/letsencrypt/:/etc/letsencrypt/:ro'
+    
+    # Основной nginx.conf (раскомментируйте если нужны глобальные изменения)
+    # - './nginx.conf:/etc/nginx/nginx.conf:ro'
     environment:
       - NODE_ENV=production
     networks:
