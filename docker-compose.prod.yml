@@ -13,14 +13,20 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
+    # Volumes для nginx конфигурации с SSL
+    volumes:
+      # Кастомная nginx конфигурация с SSL
+      - './nginx/react.conf:/etc/nginx/conf.d/default.conf:ro'
+      # SSL сертификаты Let's Encrypt (обязательно для SSL)
+      - '/etc/letsencrypt/:/etc/letsencrypt/:ro'
     environment:
       - NODE_ENV=production
     networks:
       - prod
-    # Health check
+    # Health check (использует HTTP, так как проверка идет внутри контейнера)
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
       interval: 30s
       timeout: 3s
       retries: 3
-      start_period: 5s
+      start_period: 10s
