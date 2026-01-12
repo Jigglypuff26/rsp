@@ -75,6 +75,74 @@
         "components": ["Link"],
         "specialLink": ["to"]
       }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "index",
+          "object",
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react-dom",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "react-router-dom",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "app/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "pages/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "widgets/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "features/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "entities/**",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "shared/**",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react", "react-dom"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "warnOnUnassignedImports": true
+      }
     ]
   },
   "settings": {
