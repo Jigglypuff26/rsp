@@ -1,4 +1,4 @@
-# пример запуска скрипта docker compose -f docker-compose.dev.yml -p rsp-dev up
+# пример запуска скрипта docker compose -f docker-compose.dev.yml -p rsp-dev up --build
 
 networks:
   dev:
