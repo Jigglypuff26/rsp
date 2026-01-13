@@ -80,13 +80,44 @@ docker exec -it rsp-prod sh
 docker system prune -a
 ```
 
+## Глобальный Nginx (Reverse Proxy)
+
+Для продакшена рекомендуется использовать глобальный Nginx на хосте как reverse proxy.
+
+### Быстрая настройка:
+
+```bash
+# Копирование конфигурации
+sudo cp nginx/nginx.conf /etc/nginx/sites-available/rsp
+sudo ln -s /etc/nginx/sites-available/rsp /etc/nginx/sites-enabled/rsp
+
+# Редактирование домена
+sudo nano /etc/nginx/sites-available/rsp
+
+# Проверка и перезапуск
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+Подробная инструкция в [nginx/README.md](./nginx/README.md).
+
+### Преимущества:
+
+- SSL/TLS терминация
+- Кэширование на уровне nginx
+- Rate limiting
+- Логирование запросов
+- Централизованное управление несколькими приложениями
+
 ## Структура файлов
 
 - `Dockerfile` - Multi-stage build для продакшена
 - `Dockerfile.dev` - Образ для разработки
 - `docker-compose.dev.yml` - Конфигурация для разработки
 - `docker-compose.prod.yml` - Конфигурация для продакшена
-- `nginx.conf` - Конфигурация Nginx для продакшена
+- `nginx.conf` - Конфигурация Nginx внутри контейнера
+- `nginx/nginx.conf` - Конфигурация глобального Nginx (reverse proxy)
+- `nginx/README.md` - Инструкция по настройке глобального Nginx
 - `.dockerignore` - Исключения для Docker build context
 
 ## Оптимизации
