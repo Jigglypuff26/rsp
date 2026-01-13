@@ -15,19 +15,19 @@
 
 ```bash
 # Сборка и запуск
-docker compose -f docker-compose.dev.yml -p rsp-dev up --build
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up --build
 
 # Запуск в фоновом режиме
-docker compose -f docker-compose.dev.yml -p rsp-dev up -d --build
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
 
 # Остановка
-docker compose -f docker-compose.dev.yml -p rsp-dev down
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
 
 # Просмотр логов
-docker compose -f docker-compose.dev.yml -p rsp-dev logs -f
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
 
 # Просмотр логов конкретного сервиса
-docker compose -f docker-compose.dev.yml -p rsp-dev logs -f app
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
 ```
 
 Приложение будет доступно по адресу `http://localhost:3030`
@@ -37,7 +37,7 @@ docker compose -f docker-compose.dev.yml -p rsp-dev logs -f app
 - ✅ Volume монтирование для быстрой синхронизации
 - ✅ Polling для работы на Windows/Mac
 - ✅ Health check для мониторинга состояния
-- ✅ Используется `Dockerfile.dev`
+- ✅ Используется `docker/Dockerfile.dev`
 
 **Переменные окружения для разработки:**
 - `NODE_ENV=development`
@@ -51,24 +51,24 @@ docker compose -f docker-compose.dev.yml -p rsp-dev logs -f app
 
 ```bash
 # Сборка и запуск
-docker compose -f docker-compose.prod.yml -p rsp-prod up --build
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up --build
 
 # Запуск в фоновом режиме
-docker compose -f docker-compose.prod.yml -p rsp-prod up -d --build
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
 
 # Остановка
-docker compose -f docker-compose.prod.yml -p rsp-prod down
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
 
 # Просмотр логов
-docker compose -f docker-compose.prod.yml -p rsp-prod logs -f
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
 
 # Пересборка без кэша
-docker compose -f docker-compose.prod.yml -p rsp-prod build --no-cache
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 ```
 
 Приложение будет доступно по адресу `http://localhost:3030` (порт привязан только к localhost для безопасности)
 
-**Примечание:** Если порт 3030 занят другим процессом, можно изменить порт в `docker-compose.prod.yml` (например, на `8080:8080`).
+**Примечание:** Если порт 3030 занят другим процессом, можно изменить порт в `docker/docker-compose.prod.yml` (например, на `8080:8080`).
 
 **Особенности prod-режима:**
 - ✅ Multi-stage build для оптимизации размера образа
@@ -83,12 +83,13 @@ docker compose -f docker-compose.prod.yml -p rsp-prod build --no-cache
 
 ```
 .
-├── Dockerfile              # Multi-stage build для продакшена
-├── Dockerfile.dev          # Образ для разработки
-├── docker-compose.dev.yml  # Development compose
-├── docker-compose.prod.yml # Production compose
-├── nginx.docker.conf       # Nginx конфигурация внутри контейнера
-└── .dockerignore           # Исключения для Docker build context
+├── docker/
+│   ├── Dockerfile              # Multi-stage build для продакшена
+│   ├── Dockerfile.dev          # Образ для разработки
+│   ├── docker-compose.dev.yml  # Development compose
+│   └── docker-compose.prod.yml # Production compose
+├── nginx.docker.conf           # Nginx конфигурация внутри контейнера
+└── .dockerignore               # Исключения для Docker build context
 ```
 
 **Важно:**
@@ -111,10 +112,10 @@ docker inspect rsp-prod
 docker system prune -a
 
 # Просмотр логов с фильтрацией
-docker compose -f docker-compose.prod.yml logs -f | grep error
+docker compose -f docker/docker-compose.prod.yml logs -f | grep error
 
 # Перезапуск контейнера
-docker compose -f docker-compose.prod.yml restart app
+docker compose -f docker/docker-compose.prod.yml restart app
 ```
 
 ### Оптимизация сборки
@@ -151,7 +152,7 @@ Dockerfile оптимизирован для кэширования:
 Если изменения не подхватываются автоматически:
 1. Проверьте, что volumes правильно смонтированы
 2. Убедитесь, что `WATCHPACK_POLLING=true` установлен
-3. Перезапустите контейнер: `docker compose -f docker-compose.dev.yml restart`
+3. Перезапустите контейнер: `docker compose -f docker/docker-compose.dev.yml restart`
 
 #### Проблемы с правами доступа
 
@@ -168,7 +169,7 @@ docker exec -it rsp-prod chown -R nginx:nginx /usr/share/nginx/html
 
 Если порт занят:
 ```bash
-# Измените порт в docker-compose файле
+# Измените порт в docker/docker-compose файле
 # ports:
 #   - "3001:8080"  # вместо 3030:8080
 ```
@@ -356,7 +357,7 @@ const env = process.env.REACT_APP_ENV;
 Для передачи переменных окружения в Docker:
 
 ```yaml
-# docker-compose.prod.yml
+# docker/docker-compose.prod.yml
 services:
   app:
     environment:
@@ -373,7 +374,7 @@ REACT_APP_ENV=production
 ```
 
 ```yaml
-# docker-compose.prod.yml
+# docker/docker-compose.prod.yml
 services:
   app:
     env_file:
@@ -513,10 +514,10 @@ getTTFB(sendToAnalytics);
 
 ```bash
 # Просмотр логов контейнера
-docker compose -f docker-compose.prod.yml logs -f app
+docker compose -f docker/docker-compose.prod.yml logs -f app
 
 # Просмотр последних 100 строк
-docker compose -f docker-compose.prod.yml logs --tail=100 app
+docker compose -f docker/docker-compose.prod.yml logs --tail=100 app
 
 # Просмотр логов nginx внутри контейнера
 docker exec -it rsp-prod tail -f /var/log/nginx/access.log
@@ -569,7 +570,7 @@ sudo tail -f /var/log/nginx/access.log
 netstat -ano | findstr :3030  # Windows
 lsof -i :3030                  # Linux/Mac
 
-# Измените порт в docker-compose файле
+# Измените порт в docker/docker-compose файле
 ```
 
 **Ошибка: "no space left on device"**
@@ -597,7 +598,7 @@ sudo netstat -tulpn | grep :80
 docker ps | grep rsp-prod
 
 # Проверьте логи контейнера
-docker compose -f docker-compose.prod.yml logs app
+docker compose -f docker/docker-compose.prod.yml logs app
 
 # Проверьте, что порт 3030 доступен
 curl http://localhost:3030/health

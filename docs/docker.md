@@ -15,19 +15,19 @@
 
 ```bash
 # Сборка и запуск
-docker compose -f docker-compose.dev.yml -p rsp-dev up --build
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up --build
 
 # Запуск в фоновом режиме
-docker compose -f docker-compose.dev.yml -p rsp-dev up -d --build
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
 
 # Остановка
-docker compose -f docker-compose.dev.yml -p rsp-dev down
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
 
 # Просмотр логов
-docker compose -f docker-compose.dev.yml -p rsp-dev logs -f
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
 
 # Просмотр логов конкретного сервиса
-docker compose -f docker-compose.dev.yml -p rsp-dev logs -f app
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
 ```
 
 Приложение будет доступно по адресу: **http://localhost:3030**
@@ -38,19 +38,19 @@ docker compose -f docker-compose.dev.yml -p rsp-dev logs -f app
 
 ```bash
 # Сборка и запуск
-docker compose -f docker-compose.prod.yml -p rsp-prod up --build
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up --build
 
 # Запуск в фоновом режиме
-docker compose -f docker-compose.prod.yml -p rsp-prod up -d --build
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
 
 # Остановка
-docker compose -f docker-compose.prod.yml -p rsp-prod down
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
 
 # Просмотр логов
-docker compose -f docker-compose.prod.yml -p rsp-prod logs -f
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
 
 # Пересборка без кэша
-docker compose -f docker-compose.prod.yml -p rsp-prod build --no-cache
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 ```
 
 Приложение будет доступно по адресу: **http://localhost:3030** (порт привязан только к localhost для безопасности)
@@ -59,14 +59,15 @@ docker compose -f docker-compose.prod.yml -p rsp-prod build --no-cache
 
 ```
 .
-├── Dockerfile              # Multi-stage build для продакшена
-├── Dockerfile.dev          # Образ для разработки
-├── docker-compose.dev.yml  # Конфигурация для разработки
-├── docker-compose.prod.yml # Конфигурация для продакшена
-├── nginx.docker.conf       # Nginx конфигурация внутри контейнера
-├── .dockerignore           # Исключения для Docker build context
+├── docker/
+│   ├── Dockerfile              # Multi-stage build для продакшена
+│   ├── Dockerfile.dev          # Образ для разработки
+│   ├── docker-compose.dev.yml  # Конфигурация для разработки
+│   └── docker-compose.prod.yml # Конфигурация для продакшена
+├── nginx.docker.conf           # Nginx конфигурация внутри контейнера
+├── .dockerignore               # Исключения для Docker build context
 └── nginx/
-    └── react.conf          # Конфигурация глобального Nginx (reverse proxy)
+    └── react.conf              # Конфигурация глобального Nginx (reverse proxy)
 ```
 
 ## 🔧 Особенности
@@ -77,7 +78,7 @@ docker compose -f docker-compose.prod.yml -p rsp-prod build --no-cache
 - ✅ Volume монтирование для быстрой синхронизации
 - ✅ Polling для работы на Windows/Mac
 - ✅ Health check для мониторинга состояния
-- ✅ Используется `Dockerfile.dev`
+- ✅ Используется `docker/Dockerfile.dev`
 - ✅ Порт: `3030:3000`
 
 ### Production режим
@@ -164,10 +165,10 @@ docker top rsp-prod
 
 ```bash
 # Остановка и удаление контейнеров
-docker compose -f docker-compose.prod.yml down
+docker compose -f docker/docker-compose.prod.yml down
 
 # Удаление контейнеров и volumes
-docker compose -f docker-compose.prod.yml down -v
+docker compose -f docker/docker-compose.prod.yml down -v
 
 # Очистка неиспользуемых образов
 docker image prune
@@ -231,7 +232,7 @@ Dockerfile оптимизирован для кэширования:
 
 ### Development
 
-Переменные окружения для разработки (установлены в `docker-compose.dev.yml`):
+Переменные окружения для разработки (установлены в `docker/docker-compose.dev.yml`):
 
 ```yaml
 environment:
@@ -252,7 +253,7 @@ REACT_APP_API_URL=https://api.example.com
 REACT_APP_ENV=production
 ```
 
-**2. В `docker-compose.prod.yml`:**
+**2. В `docker/docker-compose.prod.yml`:**
 ```yaml
 services:
   app:
@@ -346,7 +347,7 @@ docker inspect --format='{{json .State.Health}}' rsp-prod | jq
 
 ### Ограничения ресурсов
 
-В `docker-compose.prod.yml` настроены ограничения:
+В `docker/docker-compose.prod.yml` настроены ограничения:
 
 ```yaml
 deploy:
@@ -390,12 +391,12 @@ docker system df
 
 3. Перезапустите контейнер:
    ```bash
-   docker compose -f docker-compose.dev.yml restart
+   docker compose -f docker/docker-compose.dev.yml restart
    ```
 
 4. Проверьте логи:
    ```bash
-   docker compose -f docker-compose.dev.yml logs -f app
+   docker compose -f docker/docker-compose.dev.yml logs -f app
    ```
 
 ### Проблемы с правами доступа
@@ -467,13 +468,13 @@ docker network prune
 
 ```bash
 # Сборка без кэша
-docker compose -f docker-compose.prod.yml build --no-cache
+docker compose -f docker/docker-compose.prod.yml build --no-cache
 
 # Сборка с выводом подробной информации
-docker compose -f docker-compose.prod.yml build --progress=plain
+docker compose -f docker/docker-compose.prod.yml build --progress=plain
 
 # Просмотр логов сборки
-docker compose -f docker-compose.prod.yml build 2>&1 | tee build.log
+docker compose -f docker/docker-compose.prod.yml build 2>&1 | tee build.log
 ```
 
 ## 📚 Дополнительные ресурсы

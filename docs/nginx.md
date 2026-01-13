@@ -450,7 +450,7 @@ docker ps | grep rsp-prod
 curl http://127.0.0.1:3030/health
 
 # Проверка логов
-docker compose -f docker-compose.prod.yml logs app
+docker compose -f docker/docker-compose.prod.yml logs app
 sudo tail -f /var/log/nginx/rsp-error.log
 ```
 

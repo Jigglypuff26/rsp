@@ -3,18 +3,18 @@ version: '3.9'
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: docker/Dockerfile.dev
       target: development
     container_name: rsp-dev
     ports:
       - "3030:3000"
     volumes:
       # Монтирование исходного кода для hot-reload
-      - ./src:/app/src:ro
-      - ./public:/app/public:ro
-      - ./package.json:/app/package.json:ro
-      - ./tsconfig.json:/app/tsconfig.json:ro
+      - ../src:/app/src:ro
+      - ../public:/app/public:ro
+      - ../package.json:/app/package.json:ro
+      - ../tsconfig.json:/app/tsconfig.json:ro
       # Исключаем node_modules из volume для производительности
       - /app/node_modules
     environment:
