@@ -10,7 +10,7 @@ services:
       target: production
     container_name: rsp-prod
     ports:
-      - "3030:8080"
+      - "127.0.0.1:3030:8080"  # Привязка только к localhost для безопасности
     restart: unless-stopped
     networks:
       - rsp-prod-network

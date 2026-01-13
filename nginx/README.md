@@ -136,6 +136,12 @@ sudo tail -f /var/log/nginx/rsp-error.log
 
 ### Проблема: 502 Bad Gateway
 
+**Быстрое решение:** См. [QUICK_FIX_502.md](./QUICK_FIX_502.md)
+
+**Подробное руководство:** См. [troubleshooting.md](./troubleshooting.md)
+
+### Проблема: 502 Bad Gateway (старая версия)
+
 **Причина:** Контейнер не запущен или недоступен на порту 3030
 
 **Решение:**
