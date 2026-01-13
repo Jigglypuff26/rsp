@@ -1,0 +1,39 @@
+# syntax=docker/dockerfile:1.4
+
+FROM node:20-alpine AS development
+
+# Установка метаданных
+LABEL maintainer="Maksim Vekovshinin"
+LABEL description="RSP - React Starter Project Development Image"
+LABEL version="0.1.0"
+
+# Установка рабочей директории
+WORKDIR /app
+
+# Установка дополнительных утилит для разработки
+RUN apk add --no-cache git curl
+
+# Копирование файлов зависимостей
+COPY package.json package-lock.json ./
+
+# Установка зависимостей с кэшированием
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
+
+# Копирование исходного кода (будет перезаписан volume в docker-compose)
+COPY . .
+
+# Открытие порта для dev-сервера
+EXPOSE 3000
+
+# Переменные окружения для разработки
+ENV NODE_ENV=development
+ENV WATCHPACK_POLLING=true
+ENV CHOKIDAR_USEPOLLING=true
+
+# Health check для dev-сервера
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:3000/ || exit 1
+
+# Запуск dev-сервера
+CMD ["npm", "start"]
