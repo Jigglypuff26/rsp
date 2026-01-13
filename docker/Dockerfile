@@ -31,9 +31,6 @@ LABEL maintainer="Maksim Vekovshinin"
 LABEL description="RSP - React Starter Project Production Image"
 LABEL version="0.1.0"
 
-# Копирование конфигурации nginx
-COPY nginx.docker.conf /etc/nginx/conf.d/default.conf
-
 # Копирование собранного приложения
 COPY --from=builder /app/build /usr/share/nginx/html
 
