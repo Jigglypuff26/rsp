@@ -17,7 +17,7 @@ sudo cp -r nginx/react.conf /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/
 
 # копировние глобального конфига nginx
-sudo cp -r ./nginx.conf /etc/nginx/nginx.conf
+# sudo cp -r ./nginx.conf /etc/nginx/nginx.conf
 
 # перезапус nginx
 sudo systemctl restart nginx
