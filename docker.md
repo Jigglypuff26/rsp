@@ -25,7 +25,7 @@ docker compose -f docker-compose.dev.yml down
 docker compose -f docker-compose.dev.yml logs -f
 ```
 
-Приложение будет доступно по адресу: http://localhost:3000
+Приложение будет доступно по адресу: http://localhost:3030
 
 ### Особенности dev-режима:
 
@@ -52,7 +52,7 @@ docker compose -f docker-compose.prod.yml down
 docker compose -f docker-compose.prod.yml logs -f
 ```
 
-Приложение будет доступно по адресу: http://localhost:80
+Приложение будет доступно по адресу: http://localhost:3030
 
 ### Особенности prod-режима:
 
