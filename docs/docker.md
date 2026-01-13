@@ -64,6 +64,7 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 │   ├── Dockerfile.dev          # Образ для разработки
 │   ├── docker-compose.dev.yml  # Конфигурация для разработки
 │   └── docker-compose.prod.yml # Конфигурация для продакшена
+├── nginx.docker.conf           # Nginx конфигурация внутри контейнера
 ├── .dockerignore               # Исключения для Docker build context
 └── nginx/
     └── react.conf              # Конфигурация глобального Nginx (reverse proxy)

@@ -88,6 +88,7 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 │   ├── Dockerfile.dev          # Образ для разработки
 │   ├── docker-compose.dev.yml  # Development compose
 │   └── docker-compose.prod.yml # Production compose
+├── nginx.docker.conf           # Nginx конфигурация внутри контейнера
 └── .dockerignore               # Исключения для Docker build context
 ```
 
