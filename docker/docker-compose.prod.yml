@@ -1,0 +1,40 @@
+# запуск: docker compose -f docker/docker-compose.prod.yml up --build
+# запуск в фоновом режиме: docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+    container_name: rsp-prod
+    ports:
+      - "127.0.0.1:3030:8080"  # Привязка только к localhost для безопасности
+    restart: unless-stopped
+    networks:
+      - rsp-prod-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.rsp.environment=production"
+      - "com.rsp.version=0.1.0"
+    # Ограничения ресурсов (опционально)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  rsp-prod-network:
+    driver: bridge
+    name: rsp-prod-network
