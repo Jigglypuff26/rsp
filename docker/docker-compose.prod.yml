@@ -1,4 +1,5 @@
-# запуск docker compose -f docker/docker-compose.prod.yml up --build
+# запуск: docker compose -f docker/docker-compose.prod.yml up --build
+# запуск в фоновом режиме: docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
 
 version: '3.9'
 
