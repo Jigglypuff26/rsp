@@ -18,7 +18,11 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    host: true, // Прослушивание на всех интерфейсах (необходимо для Docker)
     open: true,
+    watch: {
+      usePolling: true, // Необходимо для Docker в некоторых системах
+    },
   },
   build: {
     outDir: 'build',
