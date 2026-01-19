@@ -102,15 +102,25 @@ src/
 - Docker >= 20.x (протестировано с версией 29.1.3)
 - Docker Compose >= 2.x
 
-```bash
-# Разработка (с hot-reload)
-docker compose -f docker/docker-compose.dev.yml -p rsp-dev up --build
+### Быстрый старт
 
-# Продакшен
-docker compose -f docker/docker-compose.prod.yml -p rsp-prod up --build
+```bash
+# Разработка - запуск в фоновом режиме
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+
+# Продакшен - запуск в фоновом режиме
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+
+# Просмотр логов
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
+
+# Остановка
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
 ```
 
-Подробнее см. [документацию по деплою](./docs/deployment.md).
+**Шпаргалка команд:** [DOCKER.md](./DOCKER.md)
+
+Подробная документация: [docs/docker.md](./docs/docker.md)
 
 ## 📝 Лицензия
 

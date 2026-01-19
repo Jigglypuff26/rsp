@@ -2,6 +2,34 @@
 
 Проект настроен для работы с Docker версии 29 по современным стандартам.
 
+## ⚡ Быстрые команды
+
+### Development
+```bash
+# Запуск в фоновом режиме
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+
+# Просмотр логов
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
+
+# Остановка
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
+```
+
+### Production
+```bash
+# Запуск в фоновом режиме
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+
+# Просмотр логов
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
+
+# Остановка
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
+```
+
+**URL:** http://localhost:3030
+
 ## 📋 Требования
 
 - **Docker** >= 20.x (рекомендуется 29.x, протестировано с версией 29.1.3)
@@ -54,6 +82,105 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 ```
 
 Приложение будет доступно по адресу: **http://localhost:3030** (порт привязан только к localhost для безопасности)
+
+## 📋 Основные команды
+
+### Запуск контейнеров
+
+```bash
+# Development - запуск в обычном режиме (с выводом логов)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up --build
+
+# Development - запуск в фоновом режиме (detached mode)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+
+# Production - запуск в обычном режиме
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up --build
+
+# Production - запуск в фоновом режиме (detached mode)
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+```
+
+### Остановка контейнеров
+
+```bash
+# Development - остановка и удаление контейнеров
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
+
+# Production - остановка и удаление контейнеров
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
+
+# Остановка с удалением volumes
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down -v
+
+# Остановка контейнера без удаления (можно запустить снова)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev stop
+
+# Запуск остановленного контейнера
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev start
+```
+
+### Перезапуск контейнеров
+
+```bash
+# Development - перезапуск
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev restart
+
+# Production - перезапуск
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod restart
+
+# Перезапуск конкретного сервиса
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev restart app
+```
+
+### Просмотр логов
+
+```bash
+# Development - просмотр логов (follow mode)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
+
+# Production - просмотр логов
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
+
+# Просмотр последних 100 строк логов
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs --tail=100
+
+# Просмотр логов конкретного сервиса
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
+```
+
+### Проверка статуса
+
+```bash
+# Просмотр запущенных контейнеров
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev ps
+
+# Просмотр использования ресурсов
+docker stats rsp-dev
+docker stats rsp-prod
+
+# Проверка health check
+docker inspect --format='{{.State.Health.Status}}' rsp-dev
+docker inspect --format='{{.State.Health.Status}}' rsp-prod
+```
+
+### Краткая справка по флагам
+
+| Флаг | Описание |
+|------|----------|
+| `up` | Создать и запустить контейнеры |
+| `down` | Остановить и удалить контейнеры |
+| `start` | Запустить существующие контейнеры |
+| `stop` | Остановить контейнеры без удаления |
+| `restart` | Перезапустить контейнеры |
+| `-d, --detach` | Запуск в фоновом режиме |
+| `--build` | Пересобрать образы перед запуском |
+| `-f` | Указать файл docker-compose |
+| `-p` | Имя проекта |
+| `-v` | Удалить именованные volumes |
+| `--no-cache` | Сборка без использования кэша |
+| `logs -f` | Просмотр логов в режиме follow |
+| `--tail=N` | Показать последние N строк логов |
 
 ## 📁 Структура файлов
 
