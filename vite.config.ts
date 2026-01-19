@@ -20,6 +20,13 @@ export default defineConfig({
     port: 3000,
     host: true, // Прослушивание на всех интерфейсах (необходимо для Docker)
     open: true,
+    strictPort: false,
+    // Разрешаем доступ с любых хостов в dev режиме
+    allowedHosts: [
+      'localhost',
+      '.pp-maksim.ru', // Поддержка всех поддоменов
+      '.local',
+    ],
     watch: {
       usePolling: true, // Необходимо для Docker в некоторых системах
     },
