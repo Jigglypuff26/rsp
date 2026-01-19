@@ -1,11 +1,12 @@
-import React from 'react';
-
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 
 import { MainPage } from './index';
 
-test('renders main page', () => {
-  render(<MainPage />);
-  const textElement = screen.getByText(/правки/i);
-  expect(textElement).toBeInTheDocument();
+describe('MainPage', () => {
+  it('renders main page', () => {
+    render(<MainPage />);
+    const textElement = screen.getByText(/правки/i);
+    expect(textElement).toBeInTheDocument();
+  });
 });

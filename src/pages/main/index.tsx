@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './styles.css';
 import logo from '../../shared/assets/logo.svg';
 

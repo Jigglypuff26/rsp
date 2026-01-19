@@ -13,15 +13,16 @@ services:
       # Монтирование исходного кода для hot-reload
       - ../src:/app/src:ro
       - ../public:/app/public:ro
-      - ../package.json:/app/package.json:ro
+      - ../index.html:/app/index.html:ro
+      - ../vite.config.ts:/app/vite.config.ts:ro
       - ../tsconfig.json:/app/tsconfig.json:ro
+      - ../tsconfig.node.json:/app/tsconfig.node.json:ro
+      - ../package.json:/app/package.json:ro
       # Исключаем node_modules из volume для производительности
       - /app/node_modules
     environment:
       - NODE_ENV=development
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_ENV=development
+      - VITE_ENV=development
     stdin_open: true
     tty: true
     restart: unless-stopped

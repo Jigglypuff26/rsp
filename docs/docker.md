@@ -2,6 +2,34 @@
 
 Проект настроен для работы с Docker версии 29 по современным стандартам.
 
+## ⚡ Быстрые команды
+
+### Development
+```bash
+# Запуск в фоновом режиме
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+
+# Просмотр логов
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
+
+# Остановка
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
+```
+
+### Production
+```bash
+# Запуск в фоновом режиме
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+
+# Просмотр логов
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
+
+# Остановка
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
+```
+
+**URL:** http://localhost:3030
+
 ## 📋 Требования
 
 - **Docker** >= 20.x (рекомендуется 29.x, протестировано с версией 29.1.3)
@@ -55,6 +83,105 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 
 Приложение будет доступно по адресу: **http://localhost:3030** (порт привязан только к localhost для безопасности)
 
+## 📋 Основные команды
+
+### Запуск контейнеров
+
+```bash
+# Development - запуск в обычном режиме (с выводом логов)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up --build
+
+# Development - запуск в фоновом режиме (detached mode)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+
+# Production - запуск в обычном режиме
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up --build
+
+# Production - запуск в фоновом режиме (detached mode)
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+```
+
+### Остановка контейнеров
+
+```bash
+# Development - остановка и удаление контейнеров
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down
+
+# Production - остановка и удаление контейнеров
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
+
+# Остановка с удалением volumes
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev down -v
+
+# Остановка контейнера без удаления (можно запустить снова)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev stop
+
+# Запуск остановленного контейнера
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev start
+```
+
+### Перезапуск контейнеров
+
+```bash
+# Development - перезапуск
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev restart
+
+# Production - перезапуск
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod restart
+
+# Перезапуск конкретного сервиса
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev restart app
+```
+
+### Просмотр логов
+
+```bash
+# Development - просмотр логов (follow mode)
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f
+
+# Production - просмотр логов
+docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
+
+# Просмотр последних 100 строк логов
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs --tail=100
+
+# Просмотр логов конкретного сервиса
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
+```
+
+### Проверка статуса
+
+```bash
+# Просмотр запущенных контейнеров
+docker compose -f docker/docker-compose.dev.yml -p rsp-dev ps
+
+# Просмотр использования ресурсов
+docker stats rsp-dev
+docker stats rsp-prod
+
+# Проверка health check
+docker inspect --format='{{.State.Health.Status}}' rsp-dev
+docker inspect --format='{{.State.Health.Status}}' rsp-prod
+```
+
+### Краткая справка по флагам
+
+| Флаг | Описание |
+|------|----------|
+| `up` | Создать и запустить контейнеры |
+| `down` | Остановить и удалить контейнеры |
+| `start` | Запустить существующие контейнеры |
+| `stop` | Остановить контейнеры без удаления |
+| `restart` | Перезапустить контейнеры |
+| `-d, --detach` | Запуск в фоновом режиме |
+| `--build` | Пересобрать образы перед запуском |
+| `-f` | Указать файл docker-compose |
+| `-p` | Имя проекта |
+| `-v` | Удалить именованные volumes |
+| `--no-cache` | Сборка без использования кэша |
+| `logs -f` | Просмотр логов в режиме follow |
+| `--tail=N` | Показать последние N строк логов |
+
 ## 📁 Структура файлов
 
 ```
@@ -74,12 +201,13 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 
 ### Development режим
 
-- ✅ Hot-reload при изменении файлов в `src/` и `public/`
+- ✅ Vite HMR (Hot Module Replacement) при изменении файлов в `src/` и `public/`
 - ✅ Volume монтирование для быстрой синхронизации
-- ✅ Polling для работы на Windows/Mac
+- ✅ Polling для работы на Windows/Mac (опционально)
 - ✅ Health check для мониторинга состояния
 - ✅ Используется `docker/Dockerfile.dev`
 - ✅ Порт: `3030:3000`
+- ✅ Мгновенный запуск dev сервера благодаря Vite
 
 ### Production режим
 
@@ -237,10 +365,10 @@ Dockerfile оптимизирован для кэширования:
 ```yaml
 environment:
   - NODE_ENV=development
-  - WATCHPACK_POLLING=true      # для работы на Windows/Mac
-  - CHOKIDAR_USEPOLLING=true    # для работы на Windows/Mac
-  - REACT_APP_ENV=development
+  - VITE_ENV=development
 ```
+
+**Примечание:** Vite использует нативные ES модули и HMR, поэтому polling переменные (`WATCHPACK_POLLING`, `CHOKIDAR_USEPOLLING`) больше не требуются в большинстве случаев. Polling включен в `vite.config.ts` при необходимости.
 
 ### Production
 
@@ -248,23 +376,27 @@ environment:
 
 **1. Файл `.env`:**
 ```bash
-# .env
-REACT_APP_API_URL=https://api.example.com
-REACT_APP_ENV=production
+# .env.production
+VITE_API_URL=https://api.example.com
+VITE_ENV=production
 ```
 
 **2. В `docker/docker-compose.prod.yml`:**
 ```yaml
 services:
   app:
-    environment:
-      - REACT_APP_API_URL=https://api.example.com
-      - REACT_APP_ENV=production
+    build:
+      args:
+        - VITE_API_URL=https://api.example.com
+        - VITE_ENV=production
     env_file:
-      - .env
+      - .env.production
 ```
 
-**Важно:** Переменные должны начинаться с `REACT_APP_` для Create React App.
+**Важно:** 
+- Переменные должны начинаться с `VITE_` для Vite
+- Переменные встраиваются в код на этапе сборки
+- Используйте `import.meta.env.VITE_*` для доступа к переменным
 
 ## 🌐 Глобальный Nginx (Reverse Proxy)
 
@@ -375,7 +507,7 @@ docker system df
 
 ## 🆘 Troubleshooting
 
-### Проблемы с hot-reload в dev-режиме
+### Проблемы с HMR (Hot Module Replacement) в dev-режиме
 
 Если изменения не подхватываются автоматически:
 
@@ -384,17 +516,27 @@ docker system df
    docker inspect rsp-dev | grep -A 10 Mounts
    ```
 
-2. Убедитесь, что `WATCHPACK_POLLING=true` установлен:
+2. Убедитесь, что Vite слушает на всех интерфейсах:
    ```bash
-   docker exec -it rsp-dev env | grep WATCHPACK
+   docker exec -it rsp-dev npm run dev -- --host 0.0.0.0
+   ```
+   (уже настроено в `vite.config.ts` и `Dockerfile.dev`)
+
+3. Проверьте, что polling включен в `vite.config.ts`:
+   ```typescript
+   server: {
+     watch: {
+       usePolling: true
+     }
+   }
    ```
 
-3. Перезапустите контейнер:
+4. Перезапустите контейнер:
    ```bash
    docker compose -f docker/docker-compose.dev.yml restart
    ```
 
-4. Проверьте логи:
+5. Проверьте логи:
    ```bash
    docker compose -f docker/docker-compose.dev.yml logs -f app
    ```
@@ -477,6 +619,50 @@ docker compose -f docker/docker-compose.prod.yml build --progress=plain
 docker compose -f docker/docker-compose.prod.yml build 2>&1 | tee build.log
 ```
 
+## ⚡ Особенности Vite в Docker
+
+### Преимущества Vite в Docker
+
+- ✅ **Мгновенный запуск** - dev сервер стартует за миллисекунды
+- ✅ **Быстрый HMR** - изменения применяются мгновенно без полной перезагрузки
+- ✅ **Нативные ES модули** - не требуется bundling в dev режиме
+- ✅ **Оптимизированная сборка** - используется esbuild для production
+
+### Конфигурация для Docker
+
+В `vite.config.ts` настроено для работы в Docker:
+
+```typescript
+server: {
+  port: 3000,
+  host: true,  // Прослушивание на всех интерфейсах (0.0.0.0)
+  open: true,
+  watch: {
+    usePolling: true  // Для работы в Docker на Windows/Mac
+  }
+}
+```
+
+### Переменные окружения
+
+Vite использует префикс `VITE_` для публичных переменных:
+
+```bash
+# Development
+VITE_API_URL=http://localhost:3001
+VITE_DEBUG=true
+
+# Production
+VITE_API_URL=https://api.example.com
+VITE_DEBUG=false
+```
+
+Доступ в коде:
+```typescript
+const apiUrl = import.meta.env.VITE_API_URL;
+const isDebug = import.meta.env.VITE_DEBUG === 'true';
+```
+
 ## 📚 Дополнительные ресурсы
 
 - [Docker Official Documentation](https://docs.docker.com/)
@@ -484,6 +670,8 @@ docker compose -f docker/docker-compose.prod.yml build 2>&1 | tee build.log
 - [Dockerfile Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 - [Multi-stage Builds](https://docs.docker.com/build/building/multi-stage/)
 - [Docker BuildKit](https://docs.docker.com/build/buildkit/)
+- [Vite Documentation](https://vitejs.dev/)
+- [Vite Docker Guide](https://vitejs.dev/guide/troubleshooting.html#docker)
 
 ## 🔗 Связанная документация
 

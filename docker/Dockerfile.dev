@@ -28,12 +28,10 @@ EXPOSE 3000
 
 # Переменные окружения для разработки
 ENV NODE_ENV=development
-ENV WATCHPACK_POLLING=true
-ENV CHOKIDAR_USEPOLLING=true
 
-# Health check для dev-сервера
+# Health check для dev-сервера (Vite)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:3000/ || exit 1
 
-# Запуск dev-сервера
-CMD ["npm", "start"]
+# Запуск Vite dev-сервера
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
