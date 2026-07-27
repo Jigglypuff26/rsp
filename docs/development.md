@@ -1,12 +1,12 @@
-# Руководство по разработке
+# 🛠️ Руководство по разработке
 
 ## 🚀 Настройка окружения
 
 ### Требования
 
-- **Node.js** >= 16.x
+- **Node.js** >= 20.19.x (требование Vite 8 / jsdom; см. `engines` пакетов)
 - **npm** >= 8.x (или **yarn** >= 1.22.x)
-- **Docker** >= 20.x (опционально, для контейнеризации, протестировано с версией 29.1.3)
+- **Docker** >= 20.x (опционально, для контейнеризации, протестировано с версией 29.x)
 - **Docker Compose** >= 2.x (опционально)
 
 ### Первоначальная настройка
@@ -20,7 +20,7 @@ cd rsp
 npm install
 
 # 3. Запустить в режиме разработки
-npm start
+npm run dev
 ```
 
 Приложение будет доступно по адресу `http://localhost:3000`
@@ -189,7 +189,7 @@ Source maps включены по умолчанию в режиме разра�
 
 ```bash
 npm run build
-# Откройте build/static/js/*.map файлы в DevTools
+# Откройте build/assets/*.map файлы в DevTools
 ```
 
 ### Логирование
@@ -259,12 +259,12 @@ npx serve -s build
 ## 📝 Полезные команды
 
 ```bash
-# Очистка кэша
-npm start -- --reset-cache
+# Очистка кэша Vite
+rm -rf node_modules/.vite
 
 # Анализ размера бандла
 npm run build
-npx source-map-explorer 'build/static/js/*.js'
+npx source-map-explorer 'build/assets/*.js'
 
 # Проверка типов TypeScript
 npx tsc --noEmit
@@ -286,8 +286,8 @@ npm install
 # Очистить кэш npm
 npm cache clean --force
 
-# Очистить кэш React
-npm start -- --reset-cache
+# Очистить кэш Vite
+rm -rf node_modules/.vite
 ```
 
 ### Проблемы с портами
@@ -296,5 +296,5 @@ npm start -- --reset-cache
 
 ```bash
 # Использовать другой порт
-PORT=3001 npm start
+npm run dev -- --port 3001
 ```

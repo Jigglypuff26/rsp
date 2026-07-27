@@ -1,4 +1,4 @@
-# Документация по Nginx
+# 🌐 Документация по Nginx
 
 Проект использует Nginx для раздачи статических файлов в production режиме. Поддерживаются два варианта конфигурации:
 
@@ -12,8 +12,18 @@
 ├── nginx.docker.conf      # Конфигурация для контейнера (порт 8080)
 ├── nginx.conf             # Глобальная конфигурация Nginx (основной конфиг)
 └── nginx/
-    └── react.conf         # Конфигурация reverse proxy для production
+    ├── react.conf         # Конфигурация reverse proxy для production
+    └── snippets/          # Общие фрагменты, переиспользуемые обоими конфигами
+        ├── gzip.conf
+        ├── static-cache.conf
+        └── hidden-files.conf
 ```
+
+### Общие сниппеты (`nginx/snippets/`)
+
+И контейнерный (`nginx.docker.conf`), и хостовый (`nginx/react.conf`) конфиги подключают одинаковые фрагменты через `include /etc/nginx/snippets/*.conf;`, чтобы не дублировать настройки gzip, кеширования статики и блокировки скрытых файлов в двух местах. Это два разных процесса nginx (контейнерный отдаёт статику, хостовой терминирует SSL и проксирует), но общая логика вынесена в один источник правды.
+
+При сборке образа сниппеты копируются в контейнер автоматически (`docker/Dockerfile.prod`). При ручной или скриптовой установке на хост их нужно скопировать в `/etc/nginx/snippets/` — это уже делает `bash.scripts/deploy.nginx.conf.sh`.
 
 ## 🐳 Nginx в Docker контейнере
 
@@ -25,7 +35,6 @@
 - Порт: `8080`
 - Корневая директория: `/usr/share/nginx/html`
 - Gzip сжатие включено
-- Security headers настроены
 - Кеширование статических файлов (1 год)
 - Health check endpoint: `/health`
 - Поддержка SPA routing (try_files)
@@ -87,19 +96,23 @@ sh ./bash.scripts/deploy.nginx.conf.sh
 #### Ручная установка
 
 ```bash
-# 1. Копирование конфигурации reverse proxy
-sudo cp nginx/react.conf /etc/nginx/sites-available/rsp
+# 1. Копирование общих сниппетов (обязательно — react.conf их подключает)
+sudo mkdir -p /etc/nginx/snippets
+sudo cp -r nginx/snippets/. /etc/nginx/snippets/
 
-# 2. Создание символической ссылки
-sudo ln -s /etc/nginx/sites-available/rsp /etc/nginx/sites-enabled/rsp
+# 2. Копирование конфигурации reverse proxy
+sudo cp nginx/react.conf /etc/nginx/sites-available/react.conf
 
-# 3. (Опционально) Копирование глобального конфига
+# 3. Создание символической ссылки
+sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/react.conf
+
+# 4. (Опционально) Копирование глобального конфига
 sudo cp nginx.conf /etc/nginx/nginx.conf
 
-# 4. Редактирование домена (если нужно)
-sudo nano /etc/nginx/sites-available/rsp
+# 5. Редактирование домена (если нужно)
+sudo nano /etc/nginx/sites-available/react.conf
 
-# 5. Проверка конфигурации
+# 6. Проверка конфигурации
 sudo nginx -t
 
 # 6. Перезапуск nginx
@@ -151,10 +164,10 @@ server {
 
 ### Настройка домена
 
-Отредактируйте файл `/etc/nginx/sites-available/rsp`:
+Отредактируйте файл `/etc/nginx/sites-available/react.conf`:
 
 ```bash
-sudo nano /etc/nginx/sites-available/rsp
+sudo nano /etc/nginx/sites-available/react.conf
 ```
 
 Замените `pp-maksim.ru` на ваш домен:

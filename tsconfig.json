@@ -24,7 +24,6 @@
     "types": ["vite/client", "vitest/globals"],
     
     /* Path mapping */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "app/*": ["./src/app/*"],

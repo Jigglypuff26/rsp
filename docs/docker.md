@@ -1,4 +1,4 @@
-# Docker Configuration
+# 🐳 Docker Configuration
 
 Проект настроен для работы с Docker версии 29 по современным стандартам.
 
@@ -32,7 +32,7 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod down
 
 ## 📋 Требования
 
-- **Docker** >= 20.x (рекомендуется 29.x, протестировано с версией 29.1.3)
+- **Docker** >= 20.x (рекомендуется 29.x, протестировано с версией 29.x)
 - **Docker Compose** >= 2.x
 
 ## 🚀 Быстрый старт
@@ -406,11 +406,11 @@ services:
 
 ```bash
 # Копирование конфигурации
-sudo cp nginx/react.conf /etc/nginx/sites-available/rsp
-sudo ln -s /etc/nginx/sites-available/rsp /etc/nginx/sites-enabled/rsp
+sudo cp nginx/react.conf /etc/nginx/sites-available/react.conf
+sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/react.conf
 
 # Редактирование домена
-sudo nano /etc/nginx/sites-available/rsp
+sudo nano /etc/nginx/sites-available/react.conf
 
 # Проверка и перезапуск
 sudo nginx -t

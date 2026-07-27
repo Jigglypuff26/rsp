@@ -7,7 +7,7 @@ services:
   app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.prod
       target: production
     container_name: rsp-prod
     ports:
