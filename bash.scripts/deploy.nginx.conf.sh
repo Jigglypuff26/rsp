@@ -10,6 +10,10 @@ sudo rm -f /etc/nginx/sites-enabled/react.conf
 # удаление старого конфига
 sudo rm -rf /etc/nginx/sites-available/react.conf
 
+# копирование общих сниппетов (gzip, кэш статики, блокировка скрытых файлов)
+sudo mkdir -p /etc/nginx/snippets
+sudo cp -r nginx/snippets/. /etc/nginx/snippets/
+
 # копирование nginx файла конфигурации
 sudo cp -r nginx/react.conf /etc/nginx/sites-available/
 # создание ссылки на nginx файл конфигурации

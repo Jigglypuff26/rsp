@@ -170,7 +170,7 @@ services:
   app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.prod
       target: production
       args:
         - VITE_API_URL=${VITE_API_URL}

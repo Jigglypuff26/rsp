@@ -84,7 +84,7 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod build --no-cache
 ```
 .
 ├── docker/
-│   ├── Dockerfile              # Multi-stage build для продакшена
+│   ├── Dockerfile.prod         # Multi-stage build для продакшена
 │   ├── Dockerfile.dev          # Образ для разработки
 │   ├── docker-compose.dev.yml  # Development compose
 │   └── docker-compose.prod.yml # Production compose
@@ -190,14 +190,14 @@ docker exec -it rsp-prod chown -R nginx:nginx /usr/share/nginx/html
 
 ```bash
 # Копирование конфигурации
-sudo cp nginx/react.conf /etc/nginx/sites-available/rsp
-sudo ln -s /etc/nginx/sites-available/rsp /etc/nginx/sites-enabled/rsp
+sudo cp nginx/react.conf /etc/nginx/sites-available/react.conf
+sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/react.conf
 
 # Копирование глобального конфига (опционально, если нужны дополнительные настройки)
 sudo cp nginx.conf /etc/nginx/nginx.conf
 
 # Редактирование домена
-sudo nano /etc/nginx/sites-available/rsp
+sudo nano /etc/nginx/sites-available/react.conf
 
 # Проверка конфигурации
 sudo nginx -t
@@ -419,7 +419,7 @@ jobs:
         VITE_API_URL: ${{ secrets.API_URL }}
     
     - name: Build Docker image
-      run: docker build -f docker/Dockerfile -t rsp:latest .
+      run: docker build -f docker/Dockerfile.prod -t rsp:latest .
     
     - name: Deploy
       run: |
@@ -460,7 +460,7 @@ docker-build:
   services:
     - docker:dind
   script:
-    - docker build -f docker/Dockerfile -t rsp:latest .
+    - docker build -f docker/Dockerfile.prod -t rsp:latest .
     - docker push registry.example.com/rsp:latest
   only:
     - main
