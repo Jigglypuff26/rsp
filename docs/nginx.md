@@ -25,7 +25,6 @@
 - Порт: `8080`
 - Корневая директория: `/usr/share/nginx/html`
 - Gzip сжатие включено
-- Security headers настроены
 - Кеширование статических файлов (1 год)
 - Health check endpoint: `/health`
 - Поддержка SPA routing (try_files)
@@ -88,16 +87,16 @@ sh ./bash.scripts/deploy.nginx.conf.sh
 
 ```bash
 # 1. Копирование конфигурации reverse proxy
-sudo cp nginx/react.conf /etc/nginx/sites-available/rsp
+sudo cp nginx/react.conf /etc/nginx/sites-available/react.conf
 
 # 2. Создание символической ссылки
-sudo ln -s /etc/nginx/sites-available/rsp /etc/nginx/sites-enabled/rsp
+sudo ln -s /etc/nginx/sites-available/react.conf /etc/nginx/sites-enabled/react.conf
 
 # 3. (Опционально) Копирование глобального конфига
 sudo cp nginx.conf /etc/nginx/nginx.conf
 
 # 4. Редактирование домена (если нужно)
-sudo nano /etc/nginx/sites-available/rsp
+sudo nano /etc/nginx/sites-available/react.conf
 
 # 5. Проверка конфигурации
 sudo nginx -t
@@ -151,10 +150,10 @@ server {
 
 ### Настройка домена
 
-Отредактируйте файл `/etc/nginx/sites-available/rsp`:
+Отредактируйте файл `/etc/nginx/sites-available/react.conf`:
 
 ```bash
-sudo nano /etc/nginx/sites-available/rsp
+sudo nano /etc/nginx/sites-available/react.conf
 ```
 
 Замените `pp-maksim.ru` на ваш домен:
