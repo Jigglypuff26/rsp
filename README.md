@@ -1,4 +1,4 @@
-# RSP - React Starter Project
+# ⚛️ RSP - React Starter Project
 
 Современный стартовый проект для разработки на React с TypeScript, организованный по методологии Feature-Sliced Design.
 
@@ -6,7 +6,7 @@
 
 ### Требования
 
-- Node.js >= 16.x
+- Node.js >= 20.19.x
 - npm >= 8.x
 
 ### Установка
@@ -56,12 +56,12 @@ src/
 
 ## 🛠 Технологический стек
 
-- **React** 19.2.3 - UI библиотека
-- **TypeScript** 5.7.3 - типизация
-- **Vite** 6.0.7 - сборщик и dev сервер
-- **Vitest** 2.1.8 - тестирование
-- **React Router** 7.12.0 - маршрутизация
-- **Zustand** 5.0.10 - управление состоянием
+- **React** 19.2.8 - UI библиотека
+- **TypeScript** 6.0.3 - типизация
+- **Vite** 8.1.5 - сборщик и dev сервер
+- **Vitest** 4.1.10 - тестирование
+- **React Router** 7.18.1 - маршрутизация
+- **Zustand** 5.0.14 - управление состоянием
 - **ESLint** + **Prettier** - качество кода
 - **React Testing Library** - компонентное тестирование
 
@@ -80,6 +80,14 @@ src/
 | `npm run code:check` | Проверка кода линтером и форматированием |
 | `npm run code:fix` | Автоматическое исправление ошибок и форматирование |
 | `npm run update` | Обновление всех зависимостей до последних версий |
+| `npm run docker:dev` | Запуск dev-контейнера (с логами в терминале) |
+| `npm run docker:dev:bg` | Запуск dev-контейнера в фоновом режиме |
+| `npm run docker:dev:down` | Остановка и удаление dev-контейнера |
+| `npm run docker:dev:logs` | Просмотр логов dev-контейнера |
+| `npm run docker:prod` | Запуск prod-контейнера (с логами в терминале) |
+| `npm run docker:prod:bg` | Запуск prod-контейнера в фоновом режиме |
+| `npm run docker:prod:down` | Остановка и удаление prod-контейнера |
+| `npm run docker:prod:logs` | Просмотр логов prod-контейнера |
 
 ## 📚 Документация
 
@@ -102,11 +110,15 @@ src/
 **Development:**
 ```bash
 docker compose -f docker/docker-compose.dev.yml -p rsp-dev up -d --build
+# или короче:
+npm run docker:dev:bg
 ```
 
 **Production:**
 ```bash
 docker compose -f docker/docker-compose.prod.yml -p rsp-prod up -d --build
+# или короче:
+npm run docker:prod:bg
 ```
 
 **Документация:**

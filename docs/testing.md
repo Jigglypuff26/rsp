@@ -1,15 +1,15 @@
-# Тестирование
+# 🧪 Тестирование
 
-Проект использует **React Testing Library** и **Jest** для тестирования компонентов и логики приложения.
+Проект использует **React Testing Library** и **Vitest** для тестирования компонентов и логики приложения.
 
-## 🧪 Настройка
+## ⚙️ Настройка
 
-Тестирование настроено автоматически через `react-scripts`. Дополнительная настройка не требуется.
+Тестирование настроено через **Vitest**, интегрированный с Vite (см. блок `test` в `vite.config.ts`). Дополнительная настройка не требуется.
 
 ### Файлы конфигурации
 
-- `src/setupTests.ts` - настройка тестового окружения
-- Конфигурация Jest наследуется из `react-scripts` (дополнительная настройка не требуется)
+- `vite.config.ts` - секция `test` (окружение `jsdom`, глобальные API, setup-файл, поддержка CSS)
+- `src/setupTests.ts` - подключает матчеры `@testing-library/jest-dom` (библиотека работает и с Vitest, несмотря на название)
 
 ## 📝 Написание тестов
 
@@ -36,9 +36,11 @@ component/
 
 ### Базовый пример
 
+Благодаря `globals: true` в конфигурации Vitest, `describe`/`it`/`expect`/`vi` доступны без импорта, но в проекте принято импортировать их явно из `vitest` (см. `src/pages/main/index.test.tsx`):
+
 ```typescript
 // Button.test.tsx
-import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './index';
@@ -50,7 +52,7 @@ describe('Button', () => {
   });
 
   it('calls onClick when clicked', async () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     const user = userEvent.setup();
 
     render(<Button onClick={handleClick}>Click me</Button>);
@@ -124,7 +126,6 @@ fireEvent.change(input, { target: { value: 'text' } });
 
 ```typescript
 // test-utils.tsx
-import React from 'react';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -141,16 +142,20 @@ export { customRender as render };
 
 ### Моки
 
+Vitest использует `vi` вместо глобального `jest`:
+
 ```typescript
+import { vi } from 'vitest';
+
 // Мок API
-jest.mock('../api/user', () => ({
-  fetchUser: jest.fn(() => Promise.resolve({ id: 1, name: 'John' })),
+vi.mock('../api/user', () => ({
+  fetchUser: vi.fn(() => Promise.resolve({ id: 1, name: 'John' })),
 }));
 
-// Мок модуля
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+// Мок модуля с сохранением остальных экспортов
+vi.mock('react-router-dom', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react-router-dom')>()),
+  useNavigate: () => vi.fn(),
 }));
 ```
 
@@ -158,27 +163,38 @@ jest.mock('react-router-dom', () => ({
 
 ### Запуск с покрытием
 
+Vitest использует провайдер покрытия `@istanbul` или `@vitest/coverage-v8`, который **не установлен в проекте по умолчанию**. Перед первым запуском добавьте один из них:
+
 ```bash
-npm test -- --coverage
+npm install --save-dev @vitest/coverage-v8
 ```
 
-### Настройка покрытия
+Затем запустите:
 
-В `package.json`:
+```bash
+npx vitest run --coverage
+```
 
-```json
-{
-  "jest": {
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": 80
-      }
-    }
-  }
-}
+### Настройка порогов покрытия
+
+В `vite.config.ts`, в секции `test`:
+
+```typescript
+test: {
+  globals: true,
+  environment: 'jsdom',
+  setupFiles: './src/setupTests.ts',
+  css: true,
+  coverage: {
+    provider: 'v8',
+    thresholds: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+},
 ```
 
 ## 🎭 Типы тестов
@@ -189,6 +205,7 @@ npm test -- --coverage
 
 ```typescript
 // utils.test.ts
+import { describe, it, expect } from 'vitest';
 import { formatDate, validateEmail } from './utils';
 
 describe('formatDate', () => {
@@ -215,7 +232,7 @@ describe('validateEmail', () => {
 
 ```typescript
 // UserCard.test.tsx
-import React from 'react';
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { UserCard } from './index';
 
@@ -240,14 +257,14 @@ describe('UserCard', () => {
 
 ```typescript
 // LoginForm.test.tsx
-import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LoginForm } from './index';
 
 describe('LoginForm Integration', () => {
   it('submits form with valid data', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const user = userEvent.setup();
 
     render(<LoginForm onSubmit={onSubmit} />);
@@ -280,15 +297,16 @@ screen.debug();
 screen.debug(screen.getByRole('button'));
 ```
 
-### Логирование
+### UI режим Vitest
 
-```typescript
-// Включить детальные логи
-screen.debug(screen.getByRole('button'), { logLevel: 'log' });
+Для интерактивной отладки тестов в браузере используйте `@vitest/ui` (уже установлен):
+
+```bash
+npx vitest --ui
 ```
 
 ## 📚 Дополнительные ресурсы
 
+- [Vitest Documentation](https://vitest.dev/)
 - [React Testing Library Documentation](https://testing-library.com/react)
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
 - [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)

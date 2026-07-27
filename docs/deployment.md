@@ -1,4 +1,4 @@
-# Деплой приложения
+# 🚀 Деплой приложения
 
 Проект поддерживает несколько способов развертывания: Docker, статический хостинг и традиционный сервер с Nginx.
 
@@ -6,7 +6,7 @@
 
 ### Требования
 
-- **Docker** >= 20.x (протестировано с версией 29.1.3)
+- **Docker** >= 20.x (протестировано с версией 29.x)
 - **Docker Compose** >= 2.x
 
 ### Режим разработки (Development)
@@ -41,9 +41,9 @@ docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
 
 **Переменные окружения для разработки:**
 - `NODE_ENV=development`
-- `WATCHPACK_POLLING=true` - для работы на Windows/Mac
-- `CHOKIDAR_USEPOLLING=true` - для работы на Windows/Mac
-- `REACT_APP_ENV=development`
+- `VITE_ENV=development`
+
+Polling для файловой системы (Windows/Mac) настроен напрямую в `vite.config.ts` (`server.watch.usePolling`), отдельные переменные `WATCHPACK_POLLING`/`CHOKIDAR_USEPOLLING` (наследие CRA) не требуются.
 
 ### Продакшен (Production)
 
@@ -335,22 +335,22 @@ server {
 
 ```bash
 # .env.development
-REACT_APP_API_URL=http://localhost:3001
-REACT_APP_ENV=development
+VITE_API_URL=http://localhost:3001
+VITE_ENV=development
 
 # .env.production
-REACT_APP_API_URL=https://api.example.com
-REACT_APP_ENV=production
+VITE_API_URL=https://api.example.com
+VITE_ENV=production
 ```
 
 ### Использование в коде
 
 ```typescript
-const apiUrl = process.env.REACT_APP_API_URL;
-const env = process.env.REACT_APP_ENV;
+const apiUrl = import.meta.env.VITE_API_URL;
+const env = import.meta.env.VITE_ENV;
 ```
 
-**Важно**: Переменные должны начинаться с `REACT_APP_`
+**Важно**: Переменные должны начинаться с `VITE_`, иначе Vite не встроит их в клиентский код
 
 ### Переменные в Docker
 
@@ -361,16 +361,16 @@ const env = process.env.REACT_APP_ENV;
 services:
   app:
     environment:
-      - REACT_APP_API_URL=https://api.example.com
-      - REACT_APP_ENV=production
+      - VITE_API_URL=https://api.example.com
+      - VITE_ENV=production
 ```
 
 Или через `.env` файл:
 
 ```bash
 # .env
-REACT_APP_API_URL=https://api.example.com
-REACT_APP_ENV=production
+VITE_API_URL=https://api.example.com
+VITE_ENV=production
 ```
 
 ```yaml
@@ -399,27 +399,27 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
         cache: 'npm'
     
     - name: Install dependencies
       run: npm ci
     
     - name: Run tests
-      run: npm test -- --coverage --watchAll=false
+      run: npx vitest run
     
     - name: Build
       run: npm run build
       env:
-        REACT_APP_API_URL: ${{ secrets.API_URL }}
+        VITE_API_URL: ${{ secrets.API_URL }}
     
     - name: Build Docker image
-      run: docker build -t rsp:latest .
+      run: docker build -f docker/Dockerfile -t rsp:latest .
     
     - name: Deploy
       run: |
@@ -439,14 +439,14 @@ stages:
 
 test:
   stage: test
-  image: node:18
+  image: node:22
   script:
     - npm ci
-    - npm test -- --coverage --watchAll=false
+    - npx vitest run
 
 build:
   stage: build
-  image: node:18
+  image: node:22
   script:
     - npm ci
     - npm run build
@@ -460,7 +460,7 @@ docker-build:
   services:
     - docker:dind
   script:
-    - docker build -t rsp:latest .
+    - docker build -f docker/Dockerfile -t rsp:latest .
     - docker push registry.example.com/rsp:latest
   only:
     - main
@@ -490,22 +490,20 @@ curl http://localhost:3030/health
 
 Проект настроен для отслеживания Web Vitals через `reportWebVitals.ts`.
 
-Для отправки метрик в аналитику:
+Метрики собираются в `src/shared/lib/reportWebVitals.ts` через актуальный API `web-vitals` (v6): `onCLS`, `onINP`, `onFCP`, `onLCP`, `onTTFB` (метрика `FID` устарела и заменена на `INP`).
+
+Чтобы отправлять метрики в аналитику, передайте свой обработчик в `reportWebVitals`:
 
 ```typescript
-// src/shared/lib/reportWebVitals.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+// src/index.tsx
+import { reportWebVitals } from './shared/lib';
 
 const sendToAnalytics = (metric: Metric) => {
   // Отправка в вашу аналитику
   // Например: Google Analytics, Sentry и т.д.
 };
 
-getCLS(sendToAnalytics);
-getFID(sendToAnalytics);
-getFCP(sendToAnalytics);
-getLCP(sendToAnalytics);
-getTTFB(sendToAnalytics);
+reportWebVitals(sendToAnalytics);
 ```
 
 ### Логирование
@@ -554,7 +552,7 @@ sudo tail -f /var/log/nginx/access.log
 
 ## 📚 Дополнительные ресурсы
 
-- [Create React App Deployment](https://create-react-app.dev/docs/deployment)
+- [Vite Static Deploy Guide](https://vitejs.dev/guide/static-deploy.html)
 - [Docker Documentation](https://docs.docker.com/)
 - [Docker Compose Documentation](https://docs.docker.com/compose/)
 - [Nginx Configuration](https://nginx.org/en/docs/)

@@ -13,7 +13,7 @@ COPY package.json package-lock.json ./
 
 # Установка зависимостей с кэшированием
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --only=production=false
+    npm ci
 
 # Копирование исходного кода
 COPY . .
