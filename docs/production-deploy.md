@@ -52,62 +52,17 @@ docker compose -f docker/docker-compose.prod.yml -p rsp-prod logs -f
 
 ### 5. Настройка Nginx на хосте (reverse proxy)
 
-Создайте конфигурацию для глобального Nginx:
+Готовая конфигурация reverse proxy для `pp-maksim.ru` уже есть в репозитории — [nginx/react.conf](../nginx/react.conf). Не создавайте отдельный файл `/etc/nginx/sites-available/pp-maksim.ru` вручную: если завести второй server-блок с тем же `server_name`, nginx выдаст `conflicting server name` и будет использовать только первый загруженный конфиг — второй молча игнорируется, что приводит к 502 на «правильном» конфиге.
+
+Ставьте конфиг единственным способом — скриптом (он же копирует общие сниппеты в `/etc/nginx/snippets/`, которые `react.conf` подключает через `include`):
 
 ```bash
-sudo nano /etc/nginx/sites-available/pp-maksim.ru
-```
-
-```nginx
-server {
-    listen 80;
-    server_name pp-maksim.ru www.pp-maksim.ru;
-    
-    # Редирект на HTTPS (если используется)
-    return 301 https://$server_name$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name pp-maksim.ru www.pp-maksim.ru;
-    
-    # SSL сертификаты (настройте свои пути)
-    ssl_certificate /etc/letsencrypt/live/pp-maksim.ru/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/pp-maksim.ru/privkey.pem;
-    
-    # SSL настройки
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
-    
-    # Логи
-    access_log /var/log/nginx/pp-maksim.ru.access.log;
-    error_log /var/log/nginx/pp-maksim.ru.error.log;
-    
-    # Проксирование в Docker контейнер
-    location / {
-        proxy_pass http://127.0.0.1:3030;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-        # Таймауты
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
-    }
-}
-```
-
-Активируйте конфигурацию:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/pp-maksim.ru /etc/nginx/sites-enabled/
+sh ./bash.scripts/deploy.nginx.conf.sh
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+
+Подробности и ручная установка — см. [docs/nginx.md](./nginx.md).
 
 ## 🔍 Диагностика проблем
 

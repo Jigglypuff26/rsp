@@ -2,7 +2,7 @@
 
 # ВНИМАНИЕ: Раскомментируйте следующую строку только если хотите удалить ВСЕ сайты
 # Это может сломать другие приложения на сервере!
-# sudo  rm -f /etc/nginx/sites-enabled/*
+sudo  rm -f /etc/nginx/sites-enabled/*
 
 # Безопасное удаление только нашего конфига
 sudo rm -f /etc/nginx/sites-enabled/react.conf
