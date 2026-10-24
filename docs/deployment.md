@@ -43,7 +43,7 @@ docker compose -f docker/docker-compose.dev.yml -p rsp-dev logs -f app
 - `NODE_ENV=development`
 - `VITE_ENV=development`
 
-Polling для файловой системы (Windows/Mac) настроен напрямую в `vite.config.ts` (`server.watch.usePolling`), отдельные переменные `WATCHPACK_POLLING`/`CHOKIDAR_USEPOLLING` (наследие CRA) не требуются.
+Polling для файловой системы (Windows/Mac) настроен напрямую в `vite.config.mts` (`server.watch.usePolling`), отдельные переменные `WATCHPACK_POLLING`/`CHOKIDAR_USEPOLLING` (наследие CRA) не требуются.
 
 ### Продакшен (Production)
 

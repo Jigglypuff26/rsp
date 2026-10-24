@@ -1,16 +1,18 @@
 # 🎨 Стиль кода
 
-Проект использует **ESLint** с конфигурацией **Airbnb** и **Prettier** для обеспечения единообразного стиля кода.
+Проект использует **ESLint 9**, рекомендуемые правила TypeScript и React и **Prettier** для обеспечения единообразного стиля кода.
 
 ## 📋 Правила ESLint
 
 ### Конфигурация
 
-Конфигурация ESLint находится в файле `.eslintrc.json` в корне проекта.
+Конфигурация ESLint находится в файле `eslint.config.cjs` в корне проекта. Используется flat config; исключения файлов заданы в поле `ignores`.
 
 Проект использует:
-- `eslint-config-airbnb` - базовые правила Airbnb
-- `eslint-config-airbnb-typescript` - правила для TypeScript
+- `@eslint/js` - рекомендуемые базовые правила JavaScript
+- `@typescript-eslint/eslint-plugin` и `@typescript-eslint/parser` - правила и парсер для TypeScript
+- `eslint-plugin-react` и `eslint-plugin-react-hooks` - правила для React и хуков
+- `eslint-plugin-jsx-a11y` и `eslint-plugin-import` - доступность и проверка импортов
 - `eslint-config-prettier` - отключение конфликтующих правил
 - `eslint-plugin-prettier` - интеграция Prettier
 

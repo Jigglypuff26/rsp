@@ -1,6 +1,9 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import path from 'path';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const configDir = fileURLToPath(new URL('.', import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,13 +11,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      app: path.resolve(__dirname, './src/app'),
-      entities: path.resolve(__dirname, './src/entities'),
-      features: path.resolve(__dirname, './src/features'),
-      pages: path.resolve(__dirname, './src/pages'),
-      shared: path.resolve(__dirname, './src/shared'),
-      widgets: path.resolve(__dirname, './src/widgets'),
+      '@': path.resolve(configDir, './src'),
+      app: path.resolve(configDir, './src/app'),
+      entities: path.resolve(configDir, './src/entities'),
+      features: path.resolve(configDir, './src/features'),
+      pages: path.resolve(configDir, './src/pages'),
+      shared: path.resolve(configDir, './src/shared'),
+      widgets: path.resolve(configDir, './src/widgets'),
     },
   },
   server: {

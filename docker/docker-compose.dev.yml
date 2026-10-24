@@ -14,7 +14,7 @@ services:
       - ../src:/app/src:ro
       - ../public:/app/public:ro
       - ../index.html:/app/index.html:ro
-      - ../vite.config.ts:/app/vite.config.ts:ro
+      - ../vite.config.mts:/app/vite.config.mts:ro
       - ../tsconfig.json:/app/tsconfig.json:ro
       - ../tsconfig.node.json:/app/tsconfig.node.json:ro
       - ../package.json:/app/package.json:ro
