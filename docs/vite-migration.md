@@ -8,8 +8,8 @@
 
 ### Добавленные файлы
 
-- `vite.config.ts` - конфигурация Vite с настройками dev server, сборки и тестирования
-- `tsconfig.node.json` - конфигурация TypeScript для Node.js окружения (для vite.config.ts)
+- `vite.config.mts` - конфигурация Vite с настройками dev server, сборки и тестирования
+- `tsconfig.node.json` - конфигурация TypeScript для Node.js окружения (для vite.config.mts)
 - `index.html` - перенесен из `public/` в корень проекта (требование Vite)
 - `src/vite-env.d.ts` - типы для Vite клиента
 - `docs/vite-migration.md` - этот документ

@@ -368,7 +368,7 @@ environment:
   - VITE_ENV=development
 ```
 
-**Примечание:** Vite использует нативные ES модули и HMR, поэтому polling переменные (`WATCHPACK_POLLING`, `CHOKIDAR_USEPOLLING`) больше не требуются в большинстве случаев. Polling включен в `vite.config.ts` при необходимости.
+**Примечание:** Vite использует нативные ES модули и HMR, поэтому polling переменные (`WATCHPACK_POLLING`, `CHOKIDAR_USEPOLLING`) больше не требуются в большинстве случаев. Polling включен в `vite.config.mts` при необходимости.
 
 ### Production
 
@@ -520,9 +520,9 @@ docker system df
    ```bash
    docker exec -it rsp-dev npm run dev -- --host 0.0.0.0
    ```
-   (уже настроено в `vite.config.ts` и `Dockerfile.dev`)
+   (уже настроено в `vite.config.mts` и `Dockerfile.dev`)
 
-3. Проверьте, что polling включен в `vite.config.ts`:
+3. Проверьте, что polling включен в `vite.config.mts`:
    ```typescript
    server: {
      watch: {
@@ -630,7 +630,7 @@ docker compose -f docker/docker-compose.prod.yml build 2>&1 | tee build.log
 
 ### Конфигурация для Docker
 
-В `vite.config.ts` настроено для работы в Docker:
+В `vite.config.mts` настроено для работы в Docker:
 
 ```typescript
 server: {
